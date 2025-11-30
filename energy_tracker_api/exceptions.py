@@ -74,3 +74,23 @@ class RateLimitError(EnergyTrackerAPIError):
     def __init__(self, message: str, api_message: list[str] = [], retry_after: int | None = None):
         super().__init__(message, api_message)
         self.retry_after = retry_after
+
+
+class NetworkError(EnergyTrackerAPIError):
+    """Raised when a network error occurs (connection issues, DNS, etc.).
+
+    Attributes:
+        api_message: List of messages from the API response body (always empty for network errors).
+    """
+
+    pass
+
+
+class TimeoutError(EnergyTrackerAPIError):
+    """Raised when a request times out.
+
+    Attributes:
+        api_message: List of messages from the API response body (always empty for timeout errors).
+    """
+
+    pass

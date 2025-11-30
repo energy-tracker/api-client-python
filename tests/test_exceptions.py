@@ -5,8 +5,10 @@ from energy_tracker_api.exceptions import (
     ConflictError,
     EnergyTrackerAPIError,
     ForbiddenError,
+    NetworkError,
     RateLimitError,
     ResourceNotFoundError,
+    TimeoutError,
     ValidationError,
 )
 
@@ -256,3 +258,71 @@ class TestRateLimitError:
 
         # Assert
         assert error.retry_after == 0
+
+
+class TestNetworkError:
+    """Tests for NetworkError (network/connection issues)."""
+
+    def test_initialization(self):
+        # Arrange
+        message = "Connection refused"
+
+        # Act
+        error = NetworkError(message)
+
+        # Assert
+        assert str(error) == message
+        assert error.api_message == []
+
+    def test_inherits_from_base_error(self):
+        # Arrange
+        error = NetworkError("Connection failed")
+
+        # Act & Assert
+        assert isinstance(error, EnergyTrackerAPIError)
+
+    def test_initialization_with_api_message(self):
+        # Arrange
+        message = "Network error"
+        api_message = []
+
+        # Act
+        error = NetworkError(message, api_message=api_message)
+
+        # Assert
+        assert str(error) == message
+        assert error.api_message == []
+
+
+class TestTimeoutError:
+    """Tests for TimeoutError (request timeout)."""
+
+    def test_initialization(self):
+        # Arrange
+        message = "Request timeout after 30 seconds"
+
+        # Act
+        error = TimeoutError(message)
+
+        # Assert
+        assert str(error) == message
+        assert error.api_message == []
+
+    def test_inherits_from_base_error(self):
+        # Arrange
+        error = TimeoutError("Timeout")
+
+        # Act & Assert
+        assert isinstance(error, EnergyTrackerAPIError)
+
+    def test_initialization_with_api_message(self):
+        # Arrange
+        message = "Operation timed out"
+        api_message = []
+
+        # Act
+        error = TimeoutError(message, api_message=api_message)
+
+        # Assert
+        assert str(error) == message
+        assert error.api_message == []

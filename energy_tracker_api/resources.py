@@ -14,7 +14,7 @@ class MeterReadingResource:
     def __init__(self, client: "EnergyTrackerClient"):
         self._client = client
 
-    def create(
+    async def create(
         self,
         device_id: str,
         meter_reading: CreateMeterReadingDto,
@@ -45,7 +45,7 @@ class MeterReadingResource:
 
         headers = {"Content-Type": "application/json"}
 
-        self._client._make_request(
+        await self._client._make_request(
             method="POST",
             endpoint=endpoint,
             json=meter_reading._to_dict(),

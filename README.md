@@ -12,34 +12,47 @@ pip install energy-tracker-api
 
 - Python 3.10+
 - Personal Access Token from Energy Tracker
+- Async/await support (asyncio)
 
 ## Usage
 
 ```python
+import asyncio
 from energy_tracker_api import EnergyTrackerClient, CreateMeterReadingDto
 from datetime import datetime
 
-client = EnergyTrackerClient(access_token="your-token")
+async def main():
+    client = EnergyTrackerClient(access_token="your-token")
 
-meter_reading = CreateMeterReadingDto(
-    value=123.45,
-    timestamp=datetime.now(),     # Optional - server uses current time if omitted
-    note="Manual reading"         # Optional
-)
+    meter_reading = CreateMeterReadingDto(
+        value=123.45,
+        timestamp=datetime.now(),     # Optional - server uses current time if omitted
+        note="Manual reading"         # Optional
+    )
 
-client.meter_readings.create(
-    device_id="your-device-id",
-    meter_reading=meter_reading,
-    allow_rounding=True           # Optional
-)
+    await client.meter_readings.create(
+        device_id="your-device-id",
+        meter_reading=meter_reading,
+        allow_rounding=True           # Optional
+    )
+
+    await client.close()
+
+asyncio.run(main())
 ```
 
-### Context Manager
+### Async Context Manager
 
 ```python
-with EnergyTrackerClient(access_token="your-token") as client:
-    reading = CreateMeterReadingDto(value=456.78)
-    client.meter_readings.create("your-device-id", reading)
+import asyncio
+from energy_tracker_api import EnergyTrackerClient, CreateMeterReadingDto
+
+async def main():
+    async with EnergyTrackerClient(access_token="your-token") as client:
+        reading = CreateMeterReadingDto(value=456.78)
+        await client.meter_readings.create("your-device-id", reading)
+
+asyncio.run(main())
 ```
 
 ## Configuration
