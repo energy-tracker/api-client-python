@@ -12,12 +12,40 @@ from .exceptions import (
     TimeoutError,
     ValidationError,
 )
-from .models import CreateMeterReadingDto
+from .models import (
+    CreateEnvironmentEntryDto,
+    CreateEnvironmentRecordDto,
+    CreateMeterReadingDto,
+    CsvDelimiter,
+    DateFormat,
+    DeviceSummaryDto,
+    EnvironmentEntryDto,
+    EnvironmentRecordDto,
+    ExportColumn,
+    ExportMeterReadingsDto,
+    MeterReadingDto,
+    SortDirection,
+    TimestampDto,
+)
 
-__version__ = "1.1.0"
+__version__ = "2.0.0"
 __all__ = [
     "EnergyTrackerClient",
+    # Models
     "CreateMeterReadingDto",
+    "MeterReadingDto",
+    "ExportMeterReadingsDto",
+    "SortDirection",
+    "CsvDelimiter",
+    "DateFormat",
+    "ExportColumn",
+    "DeviceSummaryDto",
+    "CreateEnvironmentRecordDto",
+    "CreateEnvironmentEntryDto",
+    "EnvironmentRecordDto",
+    "EnvironmentEntryDto",
+    "TimestampDto",
+    # Exceptions
     "EnergyTrackerAPIError",
     "ValidationError",
     "AuthenticationError",

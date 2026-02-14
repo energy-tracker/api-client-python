@@ -102,6 +102,30 @@ class TestEnergyTrackerClientInitialization:
         assert client.meter_readings is not None
         assert hasattr(client.meter_readings, "create")
 
+    def test_devices_resource_is_initialized(self):
+        # Arrange
+        access_token = "test-token"
+
+        # Act
+        client = EnergyTrackerClient(access_token=access_token)
+
+        # Assert
+        assert client.devices is not None
+        assert hasattr(client.devices, "list_standard")
+        assert hasattr(client.devices, "list_virtual")
+
+    def test_environments_resource_is_initialized(self):
+        # Arrange
+        access_token = "test-token"
+
+        # Act
+        client = EnergyTrackerClient(access_token=access_token)
+
+        # Assert
+        assert client.environments is not None
+        assert hasattr(client.environments, "list")
+        assert hasattr(client.environments, "create")
+
 
 class TestEnergyTrackerClientExtractApiMessage:
     """Tests for _extract_api_message method."""
@@ -160,7 +184,7 @@ class TestEnergyTrackerClientMakeRequest:
         client = EnergyTrackerClient(access_token="test-token")
         mock_response = AsyncMock()
         mock_response.status = 200
-        mock_response.json = AsyncMock(return_value={})
+        mock_response.json = AsyncMock(return_value={"key": "value"})
         mock_response.__aenter__ = AsyncMock(return_value=mock_response)
         mock_response.__aexit__ = AsyncMock(return_value=None)
 
@@ -170,10 +194,10 @@ class TestEnergyTrackerClientMakeRequest:
             mock_get_session.return_value = mock_session
 
             # Act
-            response = await client._make_request("GET", "/v1/test")
+            result = await client._make_request("GET", "/v1/test")
 
             # Assert
-            assert response.status == 200
+            assert result == {"key": "value"}
             mock_session.request.assert_called_once()
 
     @pytest.mark.asyncio

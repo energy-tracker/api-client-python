@@ -1,7 +1,7 @@
 """Energy Tracker API client implementation."""
 
 import asyncio
-from typing import Any, Optional
+from typing import Any, Literal
 from urllib.parse import urljoin
 
 import aiohttp
@@ -27,12 +27,12 @@ class EnergyTrackerClient:
     _base_url: str
     _access_token: str
     _timeout: aiohttp.ClientTimeout
-    _session: Optional[aiohttp.ClientSession]
+    _session: aiohttp.ClientSession | None
 
     def __init__(
         self,
         access_token: str,
-        base_url: Optional[str] = None,
+        base_url: str | None = None,
         timeout: int = 10,
     ):
         """Initialize the Energy Tracker API client.
@@ -49,9 +49,11 @@ class EnergyTrackerClient:
         self._timeout = aiohttp.ClientTimeout(total=timeout)
         self._session = None
 
-        from .resources import MeterReadingResource
+        from .resources import DeviceResource, EnvironmentResource, MeterReadingResource
 
+        self.devices = DeviceResource(self)
         self.meter_readings = MeterReadingResource(self)
+        self.environments = EnvironmentResource(self)
 
     async def _get_session(self) -> aiohttp.ClientSession:
         if self._session is None or self._session.closed:
@@ -73,20 +75,33 @@ class EnergyTrackerClient:
         else:
             return []
 
+    _HttpMethod = Literal["GET", "POST", "PUT", "DELETE", "PATCH"]
+
     async def _make_request(
-        self, method: str, endpoint: str, **kwargs: Any
-    ) -> aiohttp.ClientResponse:
+        self, method: _HttpMethod, endpoint: str, **kwargs: Any
+    ) -> dict | list | bytes | None:
+        """Make an API request and return parsed response data.
+
+        Returns:
+            Parsed JSON data (dict or list), None for 204 responses,
+            or raw bytes for non-JSON responses (e.g. CSV export).
+        """
         session = await self._get_session()
         url = urljoin(self._base_url, endpoint)
 
         try:
             async with session.request(method=method, url=url, **kwargs) as response:
+                response_data: dict | list | None = None
                 try:
-                    data = await response.json()
-                except (aiohttp.ContentTypeError, ValueError):
-                    data = {}
+                    response_data = await response.json(content_type=None)
+                except ValueError, aiohttp.ContentTypeError:
+                    pass
 
-                api_message = self._extract_api_message(data)
+                api_message = (
+                    self._extract_api_message(response_data)
+                    if isinstance(response_data, dict)
+                    else []
+                )
 
                 if response.status == 400:
                     message = "Bad Request"
@@ -125,19 +140,25 @@ class EnergyTrackerClient:
                         f"HTTP error: {response.status}", api_message=api_message
                     )
 
-                return response
+                if response.status == 204:
+                    return None
+
+                if response_data is not None:
+                    return response_data
+
+                return await response.read()
 
         except aiohttp.ClientError as e:
-            raise NetworkError(f"Request failed: {str(e)}")
-        except asyncio.TimeoutError:
-            raise TimeoutError(f"Request timeout after {self._timeout.total} seconds")
+            raise NetworkError(f"Request failed: {e}") from e
+        except asyncio.TimeoutError as e:
+            raise TimeoutError(f"Request timeout after {self._timeout.total} seconds") from e
 
     async def close(self) -> None:
         """Close the HTTP session."""
         if self._session and not self._session.closed:
             await self._session.close()
 
-    async def __aenter__(self) -> "EnergyTrackerClient":
+    async def __aenter__(self) -> EnergyTrackerClient:
         return self
 
     async def __aexit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:

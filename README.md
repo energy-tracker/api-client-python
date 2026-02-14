@@ -1,6 +1,6 @@
 # Energy Tracker API Client
 
-Python client for the Energy Tracker public REST API.
+Async Python client for the [Energy Tracker](https://github.com/energy-tracker) public REST API.
 
 ## Installation
 
@@ -10,50 +10,40 @@ pip install energy-tracker-api
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.14+
 - Personal Access Token from Energy Tracker
-- Async/await support (asyncio)
 
-## Usage
-
-```python
-import asyncio
-from energy_tracker_api import EnergyTrackerClient, CreateMeterReadingDto
-from datetime import datetime
-
-async def main():
-    client = EnergyTrackerClient(access_token="your-token")
-
-    meter_reading = CreateMeterReadingDto(
-        value=123.45,
-        timestamp=datetime.now(),     # Optional - server uses current time if omitted
-        note="Manual reading"         # Optional
-    )
-
-    await client.meter_readings.create(
-        device_id="your-device-id",
-        meter_reading=meter_reading,
-        allow_rounding=True           # Optional
-    )
-
-    await client.close()
-
-asyncio.run(main())
-```
-
-### Async Context Manager
+## Quick Start
 
 ```python
 import asyncio
+from decimal import Decimal
 from energy_tracker_api import EnergyTrackerClient, CreateMeterReadingDto
 
 async def main():
     async with EnergyTrackerClient(access_token="your-token") as client:
-        reading = CreateMeterReadingDto(value=456.78)
-        await client.meter_readings.create("your-device-id", reading)
+        # List devices
+        devices = await client.devices.list_standard()
+
+        # Create a meter reading
+        reading = CreateMeterReadingDto(value=Decimal("12345.67"))
+        await client.meter_readings.create(
+            device_id="your-device-id",
+            meter_reading=reading,
+        )
 
 asyncio.run(main())
 ```
+
+## Resources
+
+The client exposes three resource groups — all endpoints, parameters, and DTOs are documented in the [OpenAPI specification](https://github.com/energy-tracker/public-docs/blob/main/public-api/openapi.yml).
+
+| Resource | Methods |
+|---|---|
+| `client.devices` | `list_standard()`, `list_virtual()` |
+| `client.meter_readings` | `list()`, `create()`, `delete()`, `export()` |
+| `client.environments` | `list()`, `get()`, `create()`, `delete()`, `create_entry()`, `delete_entry()` |
 
 ## Configuration
 
@@ -61,11 +51,13 @@ asyncio.run(main())
 client = EnergyTrackerClient(
     access_token="your-token",
     base_url="https://custom-api.example.com",  # Optional
-    timeout=30                                  # Optional, default: 10 seconds
+    timeout=30,                                 # Optional, default: 10s
 )
 ```
 
 ## Error Handling
+
+All API errors inherit from `EnergyTrackerAPIError` and carry an `api_message` list with details from the server.
 
 ```python
 from energy_tracker_api import (
@@ -75,65 +67,25 @@ from energy_tracker_api import (
     ForbiddenError,
     ResourceNotFoundError,
     ConflictError,
-    RateLimitError
+    RateLimitError,
 )
 
 try:
-    await client.meter_readings.create(device_id, meter_reading)
-except ValidationError as e:
-    print(f"Validation error: {e}")
-    print(f"Details: {e.api_message}")
-except AuthenticationError:
-    print("Authentication failed - check access token")
-except ForbiddenError:
-    print("Insufficient permissions")
-except ResourceNotFoundError:
-    print("No valid meter for timestamp")
-except ConflictError:
-    print("Meter reading already exists for timestamp")
+    await client.meter_readings.create(device_id, reading)
 except RateLimitError as e:
-    print(f"Rate limit exceeded")
-    if e.retry_after:
-        print(f"Retry after {e.retry_after} seconds")
+    print(f"Retry after {e.retry_after}s")
 except EnergyTrackerAPIError as e:
-    print(f"API error: {e}")
+    print(e.api_message)
 ```
-
-## API Reference
-
-### EnergyTrackerClient
-
-**`__init__(access_token, base_url=None, timeout=10)`**
-
-- `access_token` (str): Personal Access Token
-- `base_url` (str, optional): API base URL
-- `timeout` (int, optional): Request timeout in seconds
-
-### MeterReadingResource
-
-**`meter_readings.create(device_id, meter_reading, allow_rounding=None)`**
-
-Create a new meter reading.
-
-- `device_id` (str): Device identifier
-- `meter_reading` (CreateMeterReadingDto): Meter reading data
-- `allow_rounding` (bool, optional): Allow rounding to meter precision
-
-### CreateMeterReadingDto
-
-**`CreateMeterReadingDto(value, timestamp=None, note=None)`**
-
-- `value` (float): Meter reading value
-- `timestamp` (datetime, optional): Reading timestamp (server uses current time if omitted)
-- `note` (str, optional): Note for the meter reading
 
 ## Development
 
 ```bash
 make install-dev  # Install dependencies
 make test         # Run tests
-make format       # Format code
-make lint         # Run linters
+make type-check   # mypy
+make format       # black + isort
+make lint         # Linters
 ```
 
 ## License

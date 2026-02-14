@@ -4,24 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "energy-tracker-api"
-version = "1.1.0"
+version = "2.0.0"
 description = "Async Python client for Energy Tracker API"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.14"
 license = {text = "MIT"}
 authors = [
     {name = "Stefan Nebel"}
 ]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Topic :: Home Automation",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
     "aiohttp>=3.9.0",
@@ -29,31 +26,32 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.4.0",
-    "pytest-cov>=4.1.0",
-    "black>=23.0.0",
-    "isort>=5.12.0",
-    "mypy>=1.5.0",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=4.0.0",
+    "black>=24.0.0",
+    "isort>=5.13.0",
+    "mypy>=1.8.0",
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/energy-tracker-api"
-Documentation = "https://github.com/yourusername/energy-tracker-api#readme"
-Repository = "https://github.com/yourusername/energy-tracker-api"
+Homepage = "https://github.com/energy-tracker/api-client-python"
+Documentation = "https://github.com/energy-tracker/api-client-python#readme"
+Repository = "https://github.com/energy-tracker/api-client-python"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 
 [tool.black]
 line-length = 100
-target-version = ["py310", "py311", "py312", "py313"]
+target-version = ["py314"]
 
 [tool.isort]
 profile = "black"
 line_length = 100
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.14"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
