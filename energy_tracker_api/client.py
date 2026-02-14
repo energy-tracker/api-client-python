@@ -87,7 +87,7 @@ class EnergyTrackerClient:
             or raw bytes for non-JSON responses (e.g. CSV export).
         """
         session = await self._get_session()
-        url = urljoin(self._base_url, endpoint)
+        url = urljoin(self._base_url + "/", endpoint.lstrip("/"))
 
         try:
             async with session.request(method=method, url=url, **kwargs) as response:
