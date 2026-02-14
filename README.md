@@ -79,7 +79,7 @@ from energy_tracker_api import (
 )
 
 try:
-    client.meter_readings.create(device_id, meter_reading)
+    await client.meter_readings.create(device_id, meter_reading)
 except ValidationError as e:
     print(f"Validation error: {e}")
     print(f"Details: {e.api_message}")

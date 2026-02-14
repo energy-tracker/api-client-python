@@ -15,7 +15,7 @@ DEVICE_ID = "deadbeef-dead-beef-dead-beefdeadbeef"
 
 
 async def submit_meter_reading(
-    client: EnergyTrackerClient, value: float, note: str = None
+    client: EnergyTrackerClient, value: float, note: str | None = None
 ) -> None:
     """Submit a meter reading with comprehensive error handling.
 

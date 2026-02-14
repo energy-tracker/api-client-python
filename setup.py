@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="energy-tracker-api",
-    version="1.0.0",
+    version="1.1.0",
     author="Stefan Nebel",
     description="Python client for Energy Tracker API",
     long_description=long_description,
@@ -36,7 +36,6 @@ setup(
             "black>=23.0.0",
             "isort>=5.12.0",
             "mypy>=1.5.0",
-            "types-requests>=2.31.0",
         ],
     },
 )

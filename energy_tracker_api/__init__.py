@@ -14,7 +14,7 @@ from .exceptions import (
 )
 from .models import CreateMeterReadingDto
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __all__ = [
     "EnergyTrackerClient",
     "CreateMeterReadingDto",

@@ -8,9 +8,9 @@ class EnergyTrackerAPIError(Exception):
         api_message: List of messages from the API response body.
     """
 
-    def __init__(self, message: str, api_message: list[str] = []):
+    def __init__(self, message: str, api_message: list[str] | None = None):
         super().__init__(message)
-        self.api_message = api_message
+        self.api_message = api_message if api_message is not None else []
 
 
 class ValidationError(EnergyTrackerAPIError):
@@ -71,7 +71,9 @@ class RateLimitError(EnergyTrackerAPIError):
         retry_after: Optional number of seconds to wait before retrying.
     """
 
-    def __init__(self, message: str, api_message: list[str] = [], retry_after: int | None = None):
+    def __init__(
+        self, message: str, api_message: list[str] | None = None, retry_after: int | None = None
+    ):
         super().__init__(message, api_message)
         self.retry_after = retry_after
 
