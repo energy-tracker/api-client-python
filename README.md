@@ -37,13 +37,14 @@ asyncio.run(main())
 
 ## Resources
 
-The client exposes three resource groups — all endpoints, parameters, and DTOs are documented in the [OpenAPI specification](https://github.com/energy-tracker/public-docs/blob/main/public-api/openapi.yml).
+The client exposes four resource groups — all endpoints, parameters, and DTOs are documented in the [OpenAPI specification](https://github.com/energy-tracker/public-docs/blob/main/public-api/openapi.yml).
 
 | Resource | Methods |
 |---|---|
 | `client.devices` | `list_standard()`, `list_virtual()` |
 | `client.meter_readings` | `list()`, `create()`, `delete()`, `export()` |
 | `client.environments` | `list()`, `get()`, `create()`, `delete()`, `create_entry()`, `delete_entry()` |
+| `client.calculations` | `daily_values()`, `extrapolations()` |
 
 ## Configuration
 
@@ -52,6 +53,7 @@ client = EnergyTrackerClient(
     access_token="your-token",
     base_url="https://custom-api.example.com",  # Optional
     timeout=30,                                 # Optional, default: 10s
+    calculation_timeout=60,                     # Optional, calculations only
 )
 ```
 

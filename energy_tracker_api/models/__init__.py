@@ -1,5 +1,6 @@
 """Data models for Energy Tracker API."""
 
+from .calculations import CalculationInterval, CalculationPointDto, ExtrapolationMethod
 from .common import TimestampDto
 from .devices import DeviceSummaryDto
 from .environments import (
@@ -19,6 +20,9 @@ from .meter_readings import (
 )
 
 __all__ = [
+    "CalculationInterval",
+    "CalculationPointDto",
+    "ExtrapolationMethod",
     "TimestampDto",
     "DeviceSummaryDto",
     "CreateMeterReadingDto",
