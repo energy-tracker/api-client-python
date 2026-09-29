@@ -1,0 +1,489 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "readings-list-empty",
+      "operation": "meterReadings.list",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "result": []
+      }
+    },
+    {
+      "id": "readings-list-filters",
+      "operation": "meterReadings.list",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "meterId": "33333333-3333-4333-8333-333333333333",
+        "from": "2026-09-01T12:34:56.123+02:00",
+        "to": "2026-09-29T00:00:00Z",
+        "sort": "asc"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {
+          "meterId": "33333333-3333-4333-8333-333333333333",
+          "from": "2026-09-01T12:34:56.123+02:00",
+          "to": "2026-09-29T00:00:00Z",
+          "sort": "asc"
+        },
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": [
+            {
+              "timestamp": "2026-09-01T10:34:56.123Z",
+              "value": "9999999999.999999",
+              "rolloverOffset": 1000,
+              "meterId": "33333333-3333-4333-8333-333333333333",
+              "note": "Ablesung äöü",
+              "meterNumber": "00123"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": [
+          {
+            "timestamp": "2026-09-01T10:34:56.123Z",
+            "value": "9999999999.999999",
+            "rolloverOffset": 1000,
+            "meterId": "33333333-3333-4333-8333-333333333333",
+            "note": "Ablesung äöü",
+            "meterNumber": "00123"
+          }
+        ]
+      }
+    },
+    {
+      "id": "readings-list-optional-fields",
+      "operation": "meterReadings.list",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "sort": "desc"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": [
+            {
+              "timestamp": "2026-09-01T10:34:56.123Z",
+              "value": "9999999999.999999",
+              "rolloverOffset": 1000,
+              "meterId": "33333333-3333-4333-8333-333333333333"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": [
+          {
+            "timestamp": "2026-09-01T10:34:56.123Z",
+            "value": "9999999999.999999",
+            "rolloverOffset": 1000,
+            "meterId": "33333333-3333-4333-8333-333333333333",
+            "note": null,
+            "meterNumber": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "readings-create-minimal",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 204,
+        "headers": {},
+        "body": {}
+      },
+      "expected": {
+        "result": null
+      }
+    },
+    {
+      "id": "readings-create-zero",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "0"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "0"
+          }
+        }
+      },
+      "response": {
+        "status": 204,
+        "headers": {},
+        "body": {}
+      },
+      "expected": {
+        "result": null
+      }
+    },
+    {
+      "id": "readings-create-precision",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "9999999999.999999",
+          "timestamp": "2026-09-01T12:34:56.123+02:00",
+          "note": "Ablesung äöü"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "9999999999.999999",
+            "timestamp": "2026-09-01T12:34:56.123+02:00",
+            "note": "Ablesung äöü"
+          }
+        }
+      },
+      "response": {
+        "status": 204,
+        "headers": {},
+        "body": {}
+      },
+      "expected": {
+        "result": null
+      }
+    },
+    {
+      "id": "readings-create-rounding-enabled",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "12.345678"
+        },
+        "allowRounding": true
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {
+          "allowRounding": "true"
+        },
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "12.345678"
+          }
+        }
+      },
+      "response": {
+        "status": 204,
+        "headers": {},
+        "body": {}
+      },
+      "expected": {
+        "result": null
+      }
+    },
+    {
+      "id": "readings-create-rounding-disabled",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "12.34"
+        },
+        "allowRounding": false
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {
+          "allowRounding": "false"
+        },
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "12.34"
+          }
+        }
+      },
+      "response": {
+        "status": 204,
+        "headers": {},
+        "body": {}
+      },
+      "expected": {
+        "result": null
+      }
+    },
+    {
+      "id": "readings-delete",
+      "operation": "meterReadings.delete",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "timestamp": "2026-09-01T12:34:56.123+02:00"
+      },
+      "request": {
+        "method": "DELETE",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "timestamp": "2026-09-01T12:34:56.123+02:00"
+          }
+        }
+      },
+      "response": {
+        "status": 204,
+        "headers": {},
+        "body": {}
+      },
+      "expected": {
+        "result": null
+      }
+    },
+    {
+      "id": "readings-export-defaults",
+      "operation": "meterReadings.export",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "config": {
+          "columns": [
+            "date",
+            "value"
+          ]
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings/export",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "includeHeader": true,
+            "delimiter": "comma",
+            "dateFormat": "iso",
+            "columns": [
+              "date",
+              "value"
+            ]
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/csv; charset=utf-8"
+        },
+        "body": {
+          "base64": "77u/ZGF0ZSx2YWx1ZQ0KMjAyNi0wOS0wMVQxMDozNDo1Ni4xMjNaLDEyMy40NQ0K"
+        }
+      },
+      "expected": {
+        "result": {
+          "base64": "77u/ZGF0ZSx2YWx1ZQ0KMjAyNi0wOS0wMVQxMDozNDo1Ni4xMjNaLDEyMy40NQ0K"
+        }
+      }
+    },
+    {
+      "id": "readings-export-configured",
+      "operation": "meterReadings.export",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "config": {
+          "columns": [
+            "value",
+            "note",
+            "meter_id",
+            "meter_number"
+          ],
+          "includeHeader": false,
+          "delimiter": "semicolon",
+          "dateFormat": "unix_ms"
+        },
+        "meterId": "33333333-3333-4333-8333-333333333333",
+        "from": "2026-09-01T12:34:56.123+02:00",
+        "to": "2026-09-29T00:00:00Z",
+        "sort": "asc"
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings/export",
+        "query": {
+          "meterId": "33333333-3333-4333-8333-333333333333",
+          "from": "2026-09-01T12:34:56.123+02:00",
+          "to": "2026-09-29T00:00:00Z",
+          "sort": "asc"
+        },
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "includeHeader": false,
+            "delimiter": "semicolon",
+            "dateFormat": "unix_ms",
+            "columns": [
+              "value",
+              "note",
+              "meter_id",
+              "meter_number"
+            ]
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/csv; charset=utf-8"
+        },
+        "body": {
+          "base64": "MTIzLjQ1O0FibGVzdW5nIMOkw7bDvDszMzMzMzMzMy0zMzMzLTQzMzMtODMzMy0zMzMzMzMzMzMzMzM7MDAxMjMNCg=="
+        }
+      },
+      "expected": {
+        "result": {
+          "base64": "MTIzLjQ1O0FibGVzdW5nIMOkw7bDvDszMzMzMzMzMy0zMzMzLTQzMzMtODMzMy0zMzMzMzMzMzMzMzM7MDAxMjMNCg=="
+        }
+      }
+    },
+    {
+      "id": "readings-export-json-looking",
+      "operation": "meterReadings.export",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "config": {
+          "columns": [
+            "value"
+          ],
+          "includeHeader": false
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings/export",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "includeHeader": false,
+            "delimiter": "comma",
+            "dateFormat": "iso",
+            "columns": [
+              "value"
+            ]
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/csv; charset=utf-8"
+        },
+        "body": {
+          "base64": "MTIz"
+        }
+      },
+      "expected": {
+        "result": {
+          "base64": "MTIz"
+        }
+      }
+    }
+  ]
+}

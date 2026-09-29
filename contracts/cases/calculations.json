@@ -1,0 +1,313 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "calculations-dailyvalues-empty",
+      "operation": "calculations.dailyValues",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/daily-values",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "result": []
+      }
+    },
+    {
+      "id": "calculations-dailyvalues-filters",
+      "operation": "calculations.dailyValues",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "from": "2026-03-29T00:15:12+01:00",
+        "to": "2026-03-30T00:45:23+02:00",
+        "timeZone": "Europe/Berlin"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/daily-values",
+        "query": {
+          "from": "2026-03-29T00:15:12+01:00",
+          "to": "2026-03-30T00:45:23+02:00",
+          "timeZone": "Europe/Berlin"
+        },
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": [
+            {
+              "date": "2026-03-28T23:00:00.000Z",
+              "actualValue": 4.2,
+              "actualDuration": 82800,
+              "expectedValue": 8.4,
+              "expectedDuration": 86400
+            },
+            {
+              "date": "2026-03-29T22:00:00.000Z",
+              "actualValue": 0,
+              "actualDuration": 0,
+              "expectedValue": 0,
+              "expectedDuration": 0
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": [
+          {
+            "date": "2026-03-28T23:00:00.000Z",
+            "actualValue": 4.2,
+            "actualDuration": 82800,
+            "expectedValue": 8.4,
+            "expectedDuration": 86400
+          },
+          {
+            "date": "2026-03-29T22:00:00.000Z",
+            "actualValue": 0,
+            "actualDuration": 0,
+            "expectedValue": 0,
+            "expectedDuration": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "calculations-extrapolations-empty",
+      "operation": "calculations.extrapolations",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "interval": "month"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/extrapolations/standard/month",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "result": []
+      }
+    },
+    {
+      "id": "calculations-extrapolations-filters",
+      "operation": "calculations.extrapolations",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "interval": "month",
+        "from": "2026-03-29T00:15:12+01:00",
+        "to": "2026-03-30T00:45:23+02:00",
+        "timeZone": "Europe/Berlin"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/extrapolations/standard/month",
+        "query": {
+          "from": "2026-03-29T00:15:12+01:00",
+          "to": "2026-03-30T00:45:23+02:00",
+          "timeZone": "Europe/Berlin"
+        },
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": [
+            {
+              "date": "2026-03-28T23:00:00.000Z",
+              "actualValue": 4.2,
+              "actualDuration": 82800,
+              "expectedValue": 8.4,
+              "expectedDuration": 86400
+            },
+            {
+              "date": "2026-03-29T22:00:00.000Z",
+              "actualValue": 0,
+              "actualDuration": 0,
+              "expectedValue": 0,
+              "expectedDuration": 0
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": [
+          {
+            "date": "2026-03-28T23:00:00.000Z",
+            "actualValue": 4.2,
+            "actualDuration": 82800,
+            "expectedValue": 8.4,
+            "expectedDuration": 86400
+          },
+          {
+            "date": "2026-03-29T22:00:00.000Z",
+            "actualValue": 0,
+            "actualDuration": 0,
+            "expectedValue": 0,
+            "expectedDuration": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "calculations-interval-day",
+      "operation": "calculations.extrapolations",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "interval": "day",
+        "method": "standard"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/extrapolations/standard/day",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "result": []
+      }
+    },
+    {
+      "id": "calculations-interval-week",
+      "operation": "calculations.extrapolations",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "interval": "week",
+        "method": "standard"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/extrapolations/standard/week",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "result": []
+      }
+    },
+    {
+      "id": "calculations-interval-quarter",
+      "operation": "calculations.extrapolations",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "interval": "quarter",
+        "method": "standard"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/extrapolations/standard/quarter",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "result": []
+      }
+    },
+    {
+      "id": "calculations-interval-year",
+      "operation": "calculations.extrapolations",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "interval": "year",
+        "method": "standard"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/extrapolations/standard/year",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "result": []
+      }
+    }
+  ]
+}
