@@ -11,10 +11,13 @@ from .exceptions import (
     NetworkError,
     RateLimitError,
     ResourceNotFoundError,
+    ServiceUnavailableError,
     TimeoutError,
     ValidationError,
 )
 from .models import (
+    CalculationInterval,
+    CalculationPointDto,
     CreateEnvironmentEntryDto,
     CreateEnvironmentRecordDto,
     CreateMeterReadingDto,
@@ -25,6 +28,7 @@ from .models import (
     EnvironmentRecordDto,
     ExportColumn,
     ExportMeterReadingsDto,
+    ExtrapolationMethod,
     MeterReadingDto,
     SortDirection,
     TimestampDto,
@@ -34,6 +38,9 @@ __version__ = version("energy-tracker-api")
 __all__ = [
     "EnergyTrackerClient",
     # Models
+    "CalculationInterval",
+    "CalculationPointDto",
+    "ExtrapolationMethod",
     "CreateMeterReadingDto",
     "MeterReadingDto",
     "ExportMeterReadingsDto",
@@ -55,6 +62,7 @@ __all__ = [
     "ResourceNotFoundError",
     "ConflictError",
     "RateLimitError",
+    "ServiceUnavailableError",
     "NetworkError",
     "TimeoutError",
 ]

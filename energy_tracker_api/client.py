@@ -1,6 +1,7 @@
 """Energy Tracker API client implementation."""
 
 import asyncio
+import math
 from http import HTTPStatus
 from typing import Any, Literal
 from urllib.parse import urljoin
@@ -15,6 +16,7 @@ from .exceptions import (
     NetworkError,
     RateLimitError,
     ResourceNotFoundError,
+    ServiceUnavailableError,
     TimeoutError,
     ValidationError,
 )
@@ -28,6 +30,7 @@ class EnergyTrackerClient:
     _base_url: str
     _access_token: str
     _timeout: aiohttp.ClientTimeout
+    _calculation_timeout: aiohttp.ClientTimeout
     _session: aiohttp.ClientSession | None
 
     def __init__(
@@ -35,6 +38,8 @@ class EnergyTrackerClient:
         access_token: str,
         base_url: str | None = None,
         timeout: int = 10,
+        *,
+        calculation_timeout: float = 60,
     ):
         """Initialize the Energy Tracker API client.
 
@@ -42,19 +47,35 @@ class EnergyTrackerClient:
             access_token: Bearer token for authentication.
             base_url: Base URL of the API (defaults to production API).
             timeout: Request timeout in seconds (default: 10).
+            calculation_timeout: Positive, finite timeout in seconds for calculations
+                only (default: 60; the backend allows up to 45 seconds).
         """
+        if (
+            isinstance(calculation_timeout, bool)
+            or not isinstance(calculation_timeout, (int, float))
+            or not math.isfinite(calculation_timeout)
+            or calculation_timeout <= 0
+        ):
+            raise ValueError("calculation_timeout must be a positive, finite number")
         url = base_url or self._DEFAULT_BASE_URL
 
         self._base_url = url.strip().rstrip("/")
         self._access_token = access_token
         self._timeout = aiohttp.ClientTimeout(total=timeout)
+        self._calculation_timeout = aiohttp.ClientTimeout(total=calculation_timeout)
         self._session = None
 
-        from .resources import DeviceResource, EnvironmentResource, MeterReadingResource
+        from .resources import (
+            CalculationResource,
+            DeviceResource,
+            EnvironmentResource,
+            MeterReadingResource,
+        )
 
         self.devices = DeviceResource(self)
         self.meter_readings = MeterReadingResource(self)
         self.environments = EnvironmentResource(self)
+        self.calculations = CalculationResource(self)
 
     async def _get_session(self) -> aiohttp.ClientSession:
         if self._session is None or self._session.closed:
@@ -111,10 +132,13 @@ class EnergyTrackerClient:
                     try:
                         data = await response.json()
                     except (ValueError, aiohttp.ContentTypeError) as e:
-                        raise EnergyTrackerAPIError("Expected a valid JSON response") from e
+                        raise EnergyTrackerAPIError(
+                            "Expected a valid JSON response", status_code=response.status
+                        ) from e
                     if not isinstance(data, (dict, list)):
                         raise EnergyTrackerAPIError(
-                            f"Expected a JSON object or array, got {type(data).__name__}"
+                            f"Expected a JSON object or array, got {type(data).__name__}",
+                            status_code=response.status,
                         )
                     return data
 
@@ -135,19 +159,29 @@ class EnergyTrackerClient:
                     message = "Bad Request"
                     if api_message:
                         message += f" ({'; '.join(api_message)})"
-                    raise ValidationError(message, api_message=api_message)
+                    raise ValidationError(
+                        message, api_message=api_message, status_code=response.status
+                    )
                 elif response.status == 401:
                     raise AuthenticationError(
-                        "Unauthorized: Check your access token", api_message=api_message
+                        "Unauthorized: Check your access token",
+                        api_message=api_message,
+                        status_code=response.status,
                     )
                 elif response.status == 403:
                     raise ForbiddenError(
-                        "Forbidden: Insufficient permissions", api_message=api_message
+                        "Forbidden: Insufficient permissions",
+                        api_message=api_message,
+                        status_code=response.status,
                     )
                 elif response.status == 404:
-                    raise ResourceNotFoundError("Not Found", api_message=api_message)
+                    raise ResourceNotFoundError(
+                        "Not Found", api_message=api_message, status_code=response.status
+                    )
                 elif response.status == 409:
-                    raise ConflictError("Conflict", api_message=api_message)
+                    raise ConflictError(
+                        "Conflict", api_message=api_message, status_code=response.status
+                    )
                 elif response.status == 429:
                     retry_after = response.headers.get("Retry-After")
                     retry_seconds = (
@@ -157,20 +191,34 @@ class EnergyTrackerClient:
                     if retry_seconds:
                         message += f" - Retry after {retry_seconds} seconds"
                     raise RateLimitError(
-                        message, api_message=api_message, retry_after=retry_seconds
+                        message,
+                        api_message=api_message,
+                        retry_after=retry_seconds,
+                        status_code=response.status,
+                    )
+                elif response.status == HTTPStatus.SERVICE_UNAVAILABLE:
+                    raise ServiceUnavailableError(
+                        f"Server error: {response.status}",
+                        api_message=api_message,
+                        status_code=response.status,
                     )
                 elif response.status >= 500:
                     raise EnergyTrackerAPIError(
-                        f"Server error: {response.status}", api_message=api_message
+                        f"Server error: {response.status}",
+                        api_message=api_message,
+                        status_code=response.status,
                     )
                 elif response.status >= 400:
                     raise EnergyTrackerAPIError(
-                        f"HTTP error: {response.status}", api_message=api_message
+                        f"HTTP error: {response.status}",
+                        api_message=api_message,
+                        status_code=response.status,
                     )
                 else:
                     raise EnergyTrackerAPIError(
                         f"Unexpected HTTP status: {response.status} (expected {expected_status})",
                         api_message=api_message,
+                        status_code=response.status,
                     )
 
         except asyncio.TimeoutError as e:

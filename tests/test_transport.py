@@ -7,7 +7,6 @@ from decimal import Decimal
 import aiohttp
 import pytest
 from aiohttp import web
-from aiohttp.test_utils import TestServer
 
 from energy_tracker_api import (
     CreateEnvironmentEntryDto,
@@ -21,23 +20,6 @@ from energy_tracker_api import (
     TimeoutError,
     ValidationError,
 )
-
-
-@pytest.fixture
-async def serve():
-    servers = []
-
-    async def start(handler):
-        app = web.Application()
-        app.router.add_route("*", "/{path:.*}", handler)
-        server = TestServer(app)
-        servers.append(server)
-        await server.start_server()
-        return str(server.make_url("/"))
-
-    yield start
-    for server in servers:
-        await server.close()
 
 
 @pytest.mark.parametrize("body", [b'"123.45"', b'\xef\xbb\xbf"123.45"', b"123", b"null", b""])

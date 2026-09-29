@@ -8,9 +8,23 @@ from energy_tracker_api.exceptions import (
     NetworkError,
     RateLimitError,
     ResourceNotFoundError,
+    ServiceUnavailableError,
     TimeoutError,
     ValidationError,
 )
+
+
+def test_http_status_is_optional_and_old_positional_arguments_still_work():
+    error = EnergyTrackerAPIError("Error", ["Detail"])
+    assert error.status_code is None
+    rate_limit = RateLimitError("Retry later", ["Limit reached"], 7, status_code=429)
+    assert rate_limit.retry_after == 7
+    assert rate_limit.api_message == ["Limit reached"]
+    assert rate_limit.status_code == 429
+    unavailable = ServiceUnavailableError("Unavailable", ["Deadline exceeded"], status_code=503)
+    assert unavailable.status_code == 503
+    assert unavailable.api_message == ["Deadline exceeded"]
+    assert isinstance(unavailable, EnergyTrackerAPIError)
 
 
 class TestEnergyTrackerAPIError:

@@ -6,11 +6,19 @@ class EnergyTrackerAPIError(Exception):
 
     Attributes:
         api_message: List of messages from the API response body.
+        status_code: HTTP response status, or None for local and transport errors.
     """
 
-    def __init__(self, message: str, api_message: list[str] | None = None):
+    def __init__(
+        self,
+        message: str,
+        api_message: list[str] | None = None,
+        *,
+        status_code: int | None = None,
+    ):
         super().__init__(message)
         self.api_message = api_message if api_message is not None else []
+        self.status_code = status_code
 
 
 class ValidationError(EnergyTrackerAPIError):
@@ -72,10 +80,19 @@ class RateLimitError(EnergyTrackerAPIError):
     """
 
     def __init__(
-        self, message: str, api_message: list[str] | None = None, retry_after: int | None = None
+        self,
+        message: str,
+        api_message: list[str] | None = None,
+        retry_after: int | None = None,
+        *,
+        status_code: int | None = None,
     ):
-        super().__init__(message, api_message)
+        super().__init__(message, api_message, status_code=status_code)
         self.retry_after = retry_after
+
+
+class ServiceUnavailableError(EnergyTrackerAPIError):
+    """Raised when the service is unavailable (HTTP 503), e.g. a calculation deadline expires."""
 
 
 class NetworkError(EnergyTrackerAPIError):
