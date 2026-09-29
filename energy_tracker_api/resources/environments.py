@@ -1,6 +1,7 @@
 """Environment record resource handlers for Energy Tracker API."""
 
 from datetime import datetime
+from http import HTTPStatus
 
 from ..models import (
     CreateEnvironmentEntryDto,
@@ -93,6 +94,7 @@ class EnvironmentResource(BaseResource):
             response_type=EnvironmentRecordDto,
             method="POST",
             endpoint=f"/v1/devices/standard/{device_id}/environments",
+            expected_status=HTTPStatus.CREATED,
             json=environment_record._to_dict(),
         )
 
@@ -117,6 +119,7 @@ class EnvironmentResource(BaseResource):
         await self._client._make_request(
             method="DELETE",
             endpoint=f"/v1/devices/standard/{device_id}/environments/{environment_id}",
+            expected_status=HTTPStatus.NO_CONTENT,
         )
 
     async def create_entry(
@@ -144,6 +147,7 @@ class EnvironmentResource(BaseResource):
         await self._client._make_request(
             method="POST",
             endpoint=f"/v1/devices/standard/{device_id}/environments/{environment_id}",
+            expected_status=HTTPStatus.NO_CONTENT,
             json=entry._to_dict(),
         )
 
@@ -172,5 +176,6 @@ class EnvironmentResource(BaseResource):
         await self._client._make_request(
             method="DELETE",
             endpoint=f"/v1/devices/standard/{device_id}/environments/{environment_id}/entries",
+            expected_status=HTTPStatus.NO_CONTENT,
             json=ts_dto._to_dict(),
         )

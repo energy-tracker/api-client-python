@@ -5,6 +5,8 @@ from datetime import datetime
 from decimal import Decimal
 from enum import StrEnum
 
+from ..exceptions import ValidationError
+
 
 class SortDirection(StrEnum):
     """Sort direction for query results."""
@@ -77,7 +79,7 @@ class CreateMeterReadingDto:
     """DTO for creating a new meter reading.
 
     Attributes:
-        value: Measured value to be recorded for the device.
+        value: Finite decimal value, serialized without exponent or redundant fractional zeros.
         timestamp: Optional date and time when the reading was recorded (ISO 8601, UTC).
         note: Optional note or comment about this reading.
     """
@@ -89,7 +91,11 @@ class CreateMeterReadingDto:
     def _to_dict(self) -> dict:
         data: dict[str, str] = {}
 
-        data["value"] = str(self.value)
+        if not self.value.is_finite():
+            raise ValidationError("Meter reading value must be finite")
+        # Avoid Decimal.normalize(): it can round using the current decimal context.
+        value = format(self.value, "f") if self.value else "0"
+        data["value"] = value.rstrip("0").rstrip(".") if "." in value else value
 
         if self.timestamp is not None:
             data["timestamp"] = self.timestamp.isoformat(timespec="milliseconds")

@@ -1,7 +1,7 @@
 """Example usage of the Energy Tracker API client."""
 
 import asyncio
-from datetime import datetime
+from datetime import UTC, datetime
 from decimal import Decimal
 
 from energy_tracker_api import (
@@ -33,9 +33,10 @@ async def main() -> None:
 
         # ── Meter Readings ───────────────────────────────────────
         # Create (returns None)
+        reading_timestamp = datetime.now(UTC).replace(microsecond=0)
         reading = CreateMeterReadingDto(
             value=Decimal("12345.67"),
-            timestamp=datetime.now(),
+            timestamp=reading_timestamp,
             note="Manual reading",
         )
         await client.meter_readings.create(
@@ -70,7 +71,7 @@ async def main() -> None:
         # Delete (returns None)
         await client.meter_readings.delete(
             device_id=DEVICE_ID,
-            timestamp=datetime.now(),
+            timestamp=reading_timestamp,
         )
         print("Meter reading deleted")
 
@@ -79,17 +80,18 @@ async def main() -> None:
         record = await client.environments.create(
             device_id=DEVICE_ID,
             environment_record=CreateEnvironmentRecordDto(
-                title="Temperature", 
+                title="Temperature",
                 unit="°C",
             ),
         )
         print(f"Created environment record: {record.title} (id={record.id})")
 
         # Add an entry (returns None)
+        entry_timestamp = datetime.now(UTC).replace(microsecond=0)
         await client.environments.create_entry(
             device_id=DEVICE_ID,
             environment_id=record.id,
-            entry=CreateEnvironmentEntryDto(value=21.5),
+            entry=CreateEnvironmentEntryDto(value=21.5, timestamp=entry_timestamp),
         )
         print("Environment entry created")
 
@@ -97,7 +99,7 @@ async def main() -> None:
         await client.environments.delete_entry(
             device_id=DEVICE_ID,
             environment_id=record.id,
-            timestamp=datetime.now(),
+            timestamp=entry_timestamp,
         )
         await client.environments.delete(
             device_id=DEVICE_ID,
@@ -107,7 +109,7 @@ async def main() -> None:
         # ── Error handling ───────────────────────────────────────
         try:
             await client.meter_readings.create(
-                device_id="non-existent", 
+                device_id="non-existent",
                 meter_reading=reading,
             )
         except RateLimitError as e:

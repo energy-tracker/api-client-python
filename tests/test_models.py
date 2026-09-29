@@ -1,8 +1,11 @@
 """Tests for Energy Tracker API data models."""
 
 from datetime import datetime
-from decimal import Decimal
+from decimal import Decimal, localcontext
 
+import pytest
+
+from energy_tracker_api.exceptions import ValidationError
 from energy_tracker_api.models import (
     CreateEnvironmentEntryDto,
     CreateEnvironmentRecordDto,
@@ -145,6 +148,30 @@ class TestMeterReadingDto:
 
 class TestCreateMeterReadingDto:
     """Tests for CreateMeterReadingDto (v3 request)."""
+
+    @pytest.mark.parametrize(
+        ("value", "expected"),
+        [
+            ("1E+3", "1000"),
+            ("0E-8", "0"),
+            ("-0.000", "0"),
+            ("123.45000000", "123.45"),
+            ("1.000000", "1"),
+            ("0.000001", "0.000001"),
+            ("9999999999.999999", "9999999999.999999"),
+            # Unsupported server precision must not silently round to a valid value.
+            ("1.2345678", "1.2345678"),
+        ],
+    )
+    def test_fixed_point_serialization_without_rounding(self, value, expected):
+        with localcontext() as context:
+            context.prec = 6
+            assert CreateMeterReadingDto(value=Decimal(value))._to_dict() == {"value": expected}
+
+    @pytest.mark.parametrize("value", ["NaN", "sNaN", "Infinity", "-Infinity"])
+    def test_non_finite_value_is_rejected(self, value):
+        with pytest.raises(ValidationError, match="must be finite"):
+            CreateMeterReadingDto(value=Decimal(value))._to_dict()
 
     def test_to_dict_value_is_string(self):
         # Arrange

@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Test Python ${{ matrix.python-version }}
@@ -25,18 +28,14 @@ jobs:
       - name: Install dependencies
         run: make install-dev
 
-      - name: Run tests
-        run: make test
-
-      - name: Run coverage
-        if: matrix.python-version == '3.14'
+      - name: Run tests with coverage
         run: make coverage
 
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.14'
         uses: codecov/codecov-action@v4
         with:
-          file: ./coverage.xml
+          files: ./coverage.xml
           fail_ci_if_error: false
 
   lint:
@@ -59,3 +58,18 @@ jobs:
 
       - name: Run type check
         run: make type-check
+
+  package:
+    name: Build & Validate Distribution
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Build, validate and install wheel
+        run: make check-dist

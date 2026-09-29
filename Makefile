@@ -1,4 +1,7 @@
-.PHONY: help install install-dev clean test coverage lint format type-check build upload upload-test venv
+PYTHON ?= python3.14
+SOURCES = energy_tracker_api/ tests/ scripts/ example.py
+
+.PHONY: help install install-dev clean test coverage lint format type-check build check-dist upload upload-test venv all
 
 help:
 	@echo "Available commands:"
@@ -12,22 +15,24 @@ help:
 	@echo "  make format        - Format code with black and isort"
 	@echo "  make type-check    - Run type checking with mypy"
 	@echo "  make build         - Build distribution packages"
+	@echo "  make check-dist    - Validate packages and test an isolated wheel installation"
 	@echo "  make upload-test   - Upload to TestPyPI"
 	@echo "  make upload        - Upload to PyPI"
 
 venv/bin/python:
 	@echo "Creating virtual environment..."
-	python3 -m venv venv
+	$(PYTHON) -m venv venv
 	@echo "Upgrading pip..."
 	venv/bin/pip install --upgrade pip
 
-.install-stamp: venv/bin/python requirements.txt
-	venv/bin/pip install -r requirements.txt
+venv: venv/bin/python
+
+.install-stamp: venv/bin/python pyproject.toml
 	venv/bin/pip install -e .
 	@touch .install-stamp
 
-.install-dev-stamp: .install-stamp requirements-dev.txt
-	venv/bin/pip install -r requirements-dev.txt
+.install-dev-stamp: .install-stamp pyproject.toml
+	venv/bin/pip install -e '.[dev]'
 	@touch .install-dev-stamp
 
 install: .install-stamp
@@ -42,35 +47,39 @@ clean:
 	rm -rf .mypy_cache/
 	rm -rf htmlcov/
 	rm -rf .coverage
-	rm -rf venv/
+	rm -f coverage.xml
 	rm -rf .install-stamp .install-dev-stamp
-	find . -type d -name __pycache__ -exec rm -rf {} +
-	find . -type f -name "*.pyc" -delete
+	find energy_tracker_api tests scripts -type d -name __pycache__ -exec rm -rf {} +
 
 test: .install-dev-stamp
 	venv/bin/python -m pytest tests/ -v
 
 coverage: .install-dev-stamp
-	venv/bin/python -m pytest tests/ --cov=energy_tracker_api --cov-report=html --cov-report=term
+	venv/bin/python -m pytest tests/ --cov=energy_tracker_api --cov-report=html --cov-report=term --cov-report=xml
 
 lint: .install-dev-stamp
-	venv/bin/python -m black --check energy_tracker_api/ tests/
-	venv/bin/python -m isort --check-only energy_tracker_api/ tests/
+	venv/bin/python -m black --check $(SOURCES)
+	venv/bin/python -m isort --check-only $(SOURCES)
 
 format: .install-dev-stamp
-	venv/bin/python -m black energy_tracker_api/ tests/
-	venv/bin/python -m isort energy_tracker_api/ tests/
+	venv/bin/python -m isort $(SOURCES)
+	venv/bin/python -m black $(SOURCES)
 
 type-check: .install-dev-stamp
-	venv/bin/python -m mypy energy_tracker_api/
+	venv/bin/python -m mypy energy_tracker_api/ scripts/ example.py
 
 build: .install-dev-stamp
+	rm -rf build/ dist/
 	venv/bin/python -m build
 
-upload-test: .install-dev-stamp build
+check-dist: build
+	venv/bin/python -m twine check dist/*
+	venv/bin/python scripts/check_distribution.py
+
+upload-test: check-dist
 	venv/bin/python -m twine upload --repository testpypi dist/*
 
-upload: .install-dev-stamp build
+upload: check-dist
 	venv/bin/python -m twine upload dist/*
 
-all: clean format lint type-check test
+all: lint type-check coverage check-dist

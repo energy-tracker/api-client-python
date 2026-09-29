@@ -450,20 +450,22 @@ class TestEnergyTrackerClientMakeRequest:
             assert str(exc_info.value) == "HTTP error: 418"
 
     @pytest.mark.asyncio
-    async def test_timeout_error(self):
+    @pytest.mark.parametrize("error", [asyncio.TimeoutError(), aiohttp.ServerTimeoutError()])
+    async def test_timeout_error(self, error):
         # Arrange
         client = EnergyTrackerClient(access_token="test-token", timeout=5)
 
         with patch.object(client, "_get_session") as mock_get_session:
             mock_session = AsyncMock()
-            mock_session.request = Mock(side_effect=asyncio.TimeoutError())
+            mock_session.request = Mock(side_effect=error)
             mock_get_session.return_value = mock_session
 
             # Act & Assert
             with pytest.raises(TimeoutError) as exc_info:
                 await client._make_request("GET", "/v1/test")
 
-            assert str(exc_info.value) == "Request timeout after 5 seconds"
+            assert str(exc_info.value) == "Request timed out"
+            assert exc_info.value.__cause__ is error
 
     @pytest.mark.asyncio
     async def test_network_error(self):

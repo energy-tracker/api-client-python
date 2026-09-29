@@ -1,18 +1,2 @@
-# Development dependencies
--r requirements.txt
-
-# Build tools
-setuptools>=61.0
-wheel
-build
-twine
-
-# Testing
-pytest>=8.0.0
-pytest-asyncio>=0.24.0
-pytest-cov>=4.0.0
-
-# Code quality
-black>=26.0.0
-isort>=7.0.0
-mypy>=1.14.0
+# Development dependencies are maintained in pyproject.toml.
+-e .[dev]

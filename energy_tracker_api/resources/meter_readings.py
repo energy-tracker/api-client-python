@@ -1,6 +1,7 @@
 """Meter reading resource handlers for Energy Tracker API."""
 
 from datetime import datetime
+from http import HTTPStatus
 
 from ..exceptions import EnergyTrackerAPIError
 from ..models import (
@@ -93,6 +94,7 @@ class MeterReadingResource(BaseResource):
         await self._client._make_request(
             method="POST",
             endpoint=endpoint,
+            expected_status=HTTPStatus.NO_CONTENT,
             json=meter_reading._to_dict(),
             params=params or None,
         )
@@ -121,6 +123,7 @@ class MeterReadingResource(BaseResource):
         await self._client._make_request(
             method="DELETE",
             endpoint=f"/v3/devices/standard/{device_id}/meter-readings",
+            expected_status=HTTPStatus.NO_CONTENT,
             json=ts_dto._to_dict(),
         )
 
@@ -167,6 +170,7 @@ class MeterReadingResource(BaseResource):
         data = await self._client._make_request(
             method="POST",
             endpoint=f"/v3/devices/standard/{device_id}/meter-readings/export",
+            response_type="bytes",
             json=export_config._to_dict(),
             params=params or None,
         )

@@ -129,6 +129,7 @@ class TestEnvironmentResourceCreate:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v1/devices/standard/device-123/environments",
+            expected_status=201,
             json={"title": "Temperature", "unit": "°C"},
         )
 
@@ -153,6 +154,7 @@ class TestEnvironmentResourceCreate:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v1/devices/standard/device-123/environments",
+            expected_status=201,
             json={"title": "Humidity"},
         )
 
@@ -174,6 +176,7 @@ class TestEnvironmentResourceDelete:
         client._make_request.assert_called_once_with(
             method="DELETE",
             endpoint="/v1/devices/standard/device-123/environments/env-1",
+            expected_status=204,
         )
 
 
@@ -195,6 +198,7 @@ class TestEnvironmentResourceCreateEntry:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v1/devices/standard/device-123/environments/env-1",
+            expected_status=204,
             json={"value": 23.5},
         )
 
@@ -214,6 +218,7 @@ class TestEnvironmentResourceCreateEntry:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v1/devices/standard/device-123/environments/env-1",
+            expected_status=204,
             json={"value": 23.5, "timestamp": "2024-01-15T10:30:45.123"},
         )
 
@@ -254,5 +259,6 @@ class TestEnvironmentResourceDeleteEntry:
         client._make_request.assert_called_once_with(
             method="DELETE",
             endpoint="/v1/devices/standard/device-123/environments/env-1/entries",
+            expected_status=204,
             json={"timestamp": "2024-01-15T10:30:45.123"},
         )

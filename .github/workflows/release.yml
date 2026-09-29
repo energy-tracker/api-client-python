@@ -50,8 +50,8 @@ jobs:
       - name: Install dependencies
         run: make install-dev
 
-      - name: Build package
-        run: make build
+      - name: Build and validate package
+        run: make check-dist
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

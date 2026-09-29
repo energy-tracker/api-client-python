@@ -44,6 +44,15 @@ class BaseResource:
     def __init__(self, client: EnergyTrackerClient) -> None:
         self._client = client
 
+    @staticmethod
+    def _deserialize(response_type: type[_ModelT], data: Any) -> _ModelT:
+        if not isinstance(data, dict):
+            raise EnergyTrackerAPIError(f"Expected dict response, got {type(data).__name__}")
+        try:
+            return cast(_ModelT, response_type._from_dict(data))
+        except (KeyError, ValueError, TypeError, ArithmeticError) as e:
+            raise EnergyTrackerAPIError(f"Invalid {response_type.__name__} response") from e
+
     _HttpMethod = Literal["GET", "POST", "PUT", "DELETE", "PATCH"]
 
     async def _request_model(
@@ -65,9 +74,7 @@ class BaseResource:
             A single deserialized model instance.
         """
         data = await self._client._make_request(method=method, endpoint=endpoint, **kwargs)
-        if not isinstance(data, dict):
-            raise EnergyTrackerAPIError(f"Expected dict response, got {type(data).__name__}")
-        return cast(_ModelT, response_type._from_dict(data))
+        return self._deserialize(response_type, data)
 
     async def _request_model_list(
         self,
@@ -90,4 +97,4 @@ class BaseResource:
         data = await self._client._make_request(method=method, endpoint=endpoint, **kwargs)
         if not isinstance(data, list):
             raise EnergyTrackerAPIError(f"Expected list response, got {type(data).__name__}")
-        return [cast(_ModelT, response_type._from_dict(item)) for item in data]
+        return [self._deserialize(response_type, item) for item in data]

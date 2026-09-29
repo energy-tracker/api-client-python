@@ -1,5 +1,7 @@
 """Energy Tracker API Client for Python."""
 
+from importlib.metadata import version
+
 from .client import EnergyTrackerClient
 from .exceptions import (
     AuthenticationError,
@@ -28,7 +30,7 @@ from .models import (
     TimestampDto,
 )
 
-__version__ = "2.0.0"
+__version__ = version("energy-tracker-api")
 __all__ = [
     "EnergyTrackerClient",
     # Models

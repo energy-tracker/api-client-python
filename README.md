@@ -58,6 +58,8 @@ client = EnergyTrackerClient(
 ## Error Handling
 
 All API errors inherit from `EnergyTrackerAPIError` and carry an `api_message` list with details from the server.
+Each operation accepts only its documented success status (200, 201 or 204).
+Unexpected statuses and redirects raise `EnergyTrackerAPIError`; redirects are not followed.
 
 ```python
 from energy_tracker_api import (
@@ -86,7 +88,19 @@ make test         # Run tests
 make type-check   # mypy
 make format       # black + isort
 make lint         # Linters
+make check-dist   # Build, validate and import an isolated wheel installation
 ```
+
+Package metadata, version and dependencies are maintained in `pyproject.toml`.
+The requirements files are compatibility entry points for installing the package
+and its development extra. The Makefile uses `python3.14` by default; override it
+with `make install-dev PYTHON=/path/to/python3.14` when needed.
+
+Meter reading values must be finite `Decimal` values. The client serializes them
+as fixed-point strings without redundant fractional zeros and never rounds them.
+Server-side range and precision validation still applies. When creating and
+deleting the same reading, reuse its timestamp; prefer UTC-aware timestamps
+with whole seconds as shown in `example.py`.
 
 ## License
 

@@ -49,6 +49,7 @@ class TestMeterReadingResourceCreate:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v3/devices/standard/device-123/meter-readings",
+            expected_status=204,
             json={"value": "123.45"},
             params=None,
         )
@@ -70,6 +71,7 @@ class TestMeterReadingResourceCreate:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v3/devices/standard/device-123/meter-readings",
+            expected_status=204,
             json={"value": "123.45", "timestamp": "2024-01-15T10:30:45.123"},
             params=None,
         )
@@ -90,6 +92,7 @@ class TestMeterReadingResourceCreate:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v3/devices/standard/device-123/meter-readings",
+            expected_status=204,
             json={"value": "123.45", "note": "Manual reading"},
             params=None,
         )
@@ -113,6 +116,7 @@ class TestMeterReadingResourceCreate:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v3/devices/standard/device-123/meter-readings",
+            expected_status=204,
             json={
                 "value": "123.45",
                 "timestamp": "2024-01-15T10:30:45.123",
@@ -137,6 +141,7 @@ class TestMeterReadingResourceCreate:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v3/devices/standard/device-123/meter-readings",
+            expected_status=204,
             json={"value": "123.45"},
             params={"allowRounding": "true"},
         )
@@ -159,6 +164,7 @@ class TestMeterReadingResourceCreate:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v3/devices/standard/device-123/meter-readings",
+            expected_status=204,
             json={"value": "123.45"},
             params={"allowRounding": "false"},
         )
@@ -179,6 +185,7 @@ class TestMeterReadingResourceCreate:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v3/devices/standard/device-123/meter-readings",
+            expected_status=204,
             json={"value": "123.45"},
             params=None,
         )
@@ -199,6 +206,7 @@ class TestMeterReadingResourceCreate:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v3/devices/standard/another-device-456/meter-readings",
+            expected_status=204,
             json={"value": "999.99"},
             params=None,
         )
@@ -335,6 +343,7 @@ class TestMeterReadingResourceDelete:
         client._make_request.assert_called_once_with(
             method="DELETE",
             endpoint="/v3/devices/standard/device-123/meter-readings",
+            expected_status=204,
             json={"timestamp": "2024-01-15T10:30:45.123"},
         )
 
@@ -372,6 +381,7 @@ class TestMeterReadingResourceExport:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v3/devices/standard/device-123/meter-readings/export",
+            response_type="bytes",
             json={
                 "columns": ["date", "value"],
                 "includeHeader": True,
@@ -403,6 +413,7 @@ class TestMeterReadingResourceExport:
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v3/devices/standard/device-123/meter-readings/export",
+            response_type="bytes",
             json={
                 "columns": ["date", "value"],
                 "includeHeader": True,
