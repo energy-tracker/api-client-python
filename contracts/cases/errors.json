@@ -1,0 +1,1470 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "devices-standard-empty-wrong-status",
+      "operation": "devices.listStandard",
+      "input": {},
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 201,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "devices-virtual-empty-wrong-status",
+      "operation": "devices.listVirtual",
+      "input": {},
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/virtual",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 201,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "readings-list-empty-wrong-status",
+      "operation": "meterReadings.list",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 201,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "readings-create-minimal-wrong-status",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {}
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 200,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "readings-delete-wrong-status",
+      "operation": "meterReadings.delete",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "timestamp": "2026-09-01T12:34:56.123+02:00"
+      },
+      "request": {
+        "method": "DELETE",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "timestamp": "2026-09-01T12:34:56.123+02:00"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {}
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 200,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "readings-export-defaults-wrong-status",
+      "operation": "meterReadings.export",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "config": {
+          "columns": [
+            "date",
+            "value"
+          ]
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings/export",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "includeHeader": true,
+            "delimiter": "comma",
+            "dateFormat": "iso",
+            "columns": [
+              "date",
+              "value"
+            ]
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "text/csv; charset=utf-8"
+        },
+        "body": {
+          "base64": "77u/ZGF0ZSx2YWx1ZQ0KMjAyNi0wOS0wMVQxMDozNDo1Ni4xMjNaLDEyMy40NQ0K"
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 201,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "environments-list-empty-wrong-status",
+      "operation": "environments.list",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 201,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "environments-get-wrong-status",
+      "operation": "environments.get",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "environmentId": "22222222-2222-4222-8222-222222222222"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments/22222222-2222-4222-8222-222222222222",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "id": "22222222-2222-4222-8222-222222222222",
+            "title": "Temperatur",
+            "unit": "°C",
+            "entries": [
+              {
+                "timestamp": "2026-09-01T10:34:56.123Z",
+                "value": -2.5
+              },
+              {
+                "timestamp": "2026-09-02T00:00:00Z",
+                "value": 0
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 201,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "environments-create-minimal-wrong-status",
+      "operation": "environments.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "record": {
+          "title": "Temperatur"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "title": "Temperatur"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "id": "22222222-2222-4222-8222-222222222222",
+            "entries": [],
+            "title": "Temperatur"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 200,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "environments-delete-wrong-status",
+      "operation": "environments.delete",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "environmentId": "22222222-2222-4222-8222-222222222222"
+      },
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments/22222222-2222-4222-8222-222222222222",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {}
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 200,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "environments-create-entry-minimal-wrong-status",
+      "operation": "environments.createEntry",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "environmentId": "22222222-2222-4222-8222-222222222222",
+        "entry": {
+          "value": 0
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments/22222222-2222-4222-8222-222222222222",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": 0
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {}
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 200,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "environments-delete-entry-wrong-status",
+      "operation": "environments.deleteEntry",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "environmentId": "22222222-2222-4222-8222-222222222222",
+        "timestamp": "2026-09-01T12:34:56.123+02:00"
+      },
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments/22222222-2222-4222-8222-222222222222/entries",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "timestamp": "2026-09-01T12:34:56.123+02:00"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {}
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 200,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "calculations-dailyvalues-empty-wrong-status",
+      "operation": "calculations.dailyValues",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/daily-values",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 201,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "calculations-extrapolations-empty-wrong-status",
+      "operation": "calculations.extrapolations",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "interval": "month"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/extrapolations/standard/month",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 201,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "readings-create-error-400",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 400,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "statusCode": 400,
+            "message": [
+              "Request rejected",
+              "Check request parameters"
+            ]
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "validation",
+          "status": 400,
+          "messages": [
+            "Request rejected",
+            "Check request parameters"
+          ]
+        }
+      }
+    },
+    {
+      "id": "readings-create-error-401",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "statusCode": 401,
+            "message": "Request rejected"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "authentication",
+          "status": 401,
+          "messages": [
+            "Request rejected"
+          ]
+        }
+      }
+    },
+    {
+      "id": "readings-create-error-403",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 403,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "statusCode": 403,
+            "message": "Request rejected"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "forbidden",
+          "status": 403,
+          "messages": [
+            "Request rejected"
+          ]
+        }
+      }
+    },
+    {
+      "id": "readings-create-error-404",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "statusCode": 404,
+            "message": "Request rejected"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "notFound",
+          "status": 404,
+          "messages": [
+            "Request rejected"
+          ]
+        }
+      }
+    },
+    {
+      "id": "readings-create-error-409",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 409,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "statusCode": 409,
+            "message": "Request rejected"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "conflict",
+          "status": 409,
+          "messages": [
+            "Request rejected"
+          ]
+        }
+      }
+    },
+    {
+      "id": "readings-create-error-429",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 429,
+        "headers": {
+          "Content-Type": "application/json",
+          "Retry-After": "60"
+        },
+        "body": {
+          "json": {
+            "statusCode": 429,
+            "message": "Request rejected"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "rateLimit",
+          "status": 429,
+          "messages": [
+            "Request rejected"
+          ],
+          "retryAfter": 60
+        }
+      }
+    },
+    {
+      "id": "readings-create-error-500",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 500,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "statusCode": 500,
+            "message": "Request rejected"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 500,
+          "messages": [
+            "Request rejected"
+          ]
+        }
+      }
+    },
+    {
+      "id": "readings-create-error-503",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 503,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "statusCode": 503,
+            "message": "Request rejected"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "unavailable",
+          "status": 503,
+          "messages": [
+            "Request rejected"
+          ]
+        }
+      }
+    },
+    {
+      "id": "readings-create-error-418",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 418,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "statusCode": 418,
+            "message": "Request rejected"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 418,
+          "messages": [
+            "Request rejected"
+          ]
+        }
+      }
+    },
+    {
+      "id": "rate-limit-retry-after-missing",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 429,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "statusCode": 429,
+            "message": "Request rejected"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "rateLimit",
+          "status": 429,
+          "messages": [
+            "Request rejected"
+          ],
+          "retryAfter": null
+        }
+      }
+    },
+    {
+      "id": "rate-limit-retry-after-invalid",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 429,
+        "headers": {
+          "Content-Type": "application/json",
+          "Retry-After": "tomorrow"
+        },
+        "body": {
+          "json": {
+            "statusCode": 429,
+            "message": "Request rejected"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "rateLimit",
+          "status": 429,
+          "messages": [
+            "Request rejected"
+          ],
+          "retryAfter": null
+        }
+      }
+    },
+    {
+      "id": "rate-limit-retry-after-zero",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 429,
+        "headers": {
+          "Content-Type": "application/json",
+          "Retry-After": "0"
+        },
+        "body": {
+          "json": {
+            "statusCode": 429,
+            "message": "Request rejected"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "rateLimit",
+          "status": 429,
+          "messages": [
+            "Request rejected"
+          ],
+          "retryAfter": 0
+        }
+      }
+    },
+    {
+      "id": "readings-create-redirect-301",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 301,
+        "headers": {
+          "Location": "/redirect-target"
+        },
+        "body": {}
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 301,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "readings-create-redirect-302",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 302,
+        "headers": {
+          "Location": "/redirect-target"
+        },
+        "body": {}
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 302,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "readings-create-redirect-303",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 303,
+        "headers": {
+          "Location": "/redirect-target"
+        },
+        "body": {}
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 303,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "readings-create-redirect-307",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 307,
+        "headers": {
+          "Location": "/redirect-target"
+        },
+        "body": {}
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 307,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "readings-create-redirect-308",
+      "operation": "meterReadings.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "reading": {
+          "value": "123.45"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": "123.45"
+          }
+        }
+      },
+      "response": {
+        "status": 308,
+        "headers": {
+          "Location": "/redirect-target"
+        },
+        "body": {}
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 308,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "readings-export-defaults-unavailable",
+      "operation": "meterReadings.export",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "config": {
+          "columns": [
+            "date",
+            "value"
+          ]
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings/export",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "includeHeader": true,
+            "delimiter": "comma",
+            "dateFormat": "iso",
+            "columns": [
+              "date",
+              "value"
+            ]
+          }
+        }
+      },
+      "response": {
+        "status": 503,
+        "headers": {
+          "Content-Type": "text/html"
+        },
+        "body": {
+          "text": "<html>Service unavailable</html>"
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "unavailable",
+          "status": 503,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "calculations-dailyvalues-empty-unavailable",
+      "operation": "calculations.dailyValues",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/daily-values",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 503,
+        "headers": {
+          "Content-Type": "text/html"
+        },
+        "body": {
+          "text": "<html>Service unavailable</html>"
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "unavailable",
+          "status": 503,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "calculations-extrapolations-empty-unavailable",
+      "operation": "calculations.extrapolations",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "interval": "month"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/extrapolations/standard/month",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 503,
+        "headers": {
+          "Content-Type": "text/html"
+        },
+        "body": {
+          "text": "<html>Service unavailable</html>"
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "unavailable",
+          "status": 503,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "response-json-broken",
+      "operation": "devices.listStandard",
+      "input": {},
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "text": "{"
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 200,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "response-json-null",
+      "operation": "devices.listStandard",
+      "input": {},
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": null
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 200,
+          "messages": []
+        }
+      }
+    },
+    {
+      "id": "response-json-wrong-content-type",
+      "operation": "devices.listStandard",
+      "input": {},
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/html"
+        },
+        "body": {
+          "text": "[]"
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 200,
+          "messages": []
+        }
+      }
+    }
+  ]
+}

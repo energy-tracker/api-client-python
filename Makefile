@@ -1,7 +1,7 @@
 PYTHON ?= python3.14
 SOURCES = energy_tracker_api/ tests/ scripts/ example.py
 
-.PHONY: help install install-dev clean test coverage lint format type-check build check-dist upload upload-test venv all
+.PHONY: help install install-dev clean test test-contracts coverage lint format type-check build check-dist upload upload-test venv all
 
 help:
 	@echo "Available commands:"
@@ -10,6 +10,7 @@ help:
 	@echo "  make install-dev   - Install package with development dependencies"
 	@echo "  make clean         - Remove build artifacts and cache files"
 	@echo "  make test          - Run tests"
+	@echo "  make test-contracts - Run shared API contract cases"
 	@echo "  make coverage      - Run tests with coverage report"
 	@echo "  make lint          - Run code linting (black check + isort check)"
 	@echo "  make format        - Format code with black and isort"
@@ -53,6 +54,9 @@ clean:
 
 test: .install-dev-stamp
 	venv/bin/python -m pytest tests/ -v
+
+test-contracts: .install-dev-stamp
+	venv/bin/python -m pytest tests/test_contracts.py -v
 
 coverage: .install-dev-stamp
 	venv/bin/python -m pytest tests/ --cov=energy_tracker_api --cov-report=html --cov-report=term --cov-report=xml

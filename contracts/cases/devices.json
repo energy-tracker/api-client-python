@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "devices-standard-empty",
+      "operation": "devices.listStandard",
+      "input": {},
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "result": []
+      }
+    },
+    {
+      "id": "devices-standard-filters",
+      "operation": "devices.listStandard",
+      "input": {
+        "name": "Gas & Wärme",
+        "folderPath": "/Haus/Keller + Süd",
+        "updatedAfter": "2026-09-01T12:34:56.123+02:00",
+        "updatedBefore": "2026-09-29T00:00:00Z"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard",
+        "query": {
+          "name": "Gas & Wärme",
+          "folderPath": "/Haus/Keller + Süd",
+          "updatedAfter": "2026-09-01T12:34:56.123+02:00",
+          "updatedBefore": "2026-09-29T00:00:00Z"
+        },
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": [
+            {
+              "id": "11111111-1111-4111-8111-111111111111",
+              "name": "Gas & Wärme",
+              "folderPath": "/Haus/Keller",
+              "lastUpdatedAt": "2026-09-01T10:34:56.123Z"
+            },
+            {
+              "id": "22222222-2222-4222-8222-222222222222",
+              "name": "Wasser",
+              "folderPath": "/",
+              "lastUpdatedAt": null
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": [
+          {
+            "id": "11111111-1111-4111-8111-111111111111",
+            "name": "Gas & Wärme",
+            "folderPath": "/Haus/Keller",
+            "lastUpdatedAt": "2026-09-01T10:34:56.123Z"
+          },
+          {
+            "id": "22222222-2222-4222-8222-222222222222",
+            "name": "Wasser",
+            "folderPath": "/",
+            "lastUpdatedAt": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "devices-standard-optional-date",
+      "operation": "devices.listStandard",
+      "input": {},
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": [
+            {
+              "id": "11111111-1111-4111-8111-111111111111",
+              "name": "Gas",
+              "folderPath": "/"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": [
+          {
+            "id": "11111111-1111-4111-8111-111111111111",
+            "name": "Gas",
+            "folderPath": "/",
+            "lastUpdatedAt": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "devices-virtual-empty",
+      "operation": "devices.listVirtual",
+      "input": {},
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/virtual",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "result": []
+      }
+    },
+    {
+      "id": "devices-virtual-filters",
+      "operation": "devices.listVirtual",
+      "input": {
+        "name": "Gas & Wärme",
+        "folderPath": "/Haus/Keller + Süd",
+        "updatedAfter": "2026-09-01T12:34:56.123+02:00",
+        "updatedBefore": "2026-09-29T00:00:00Z"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/virtual",
+        "query": {
+          "name": "Gas & Wärme",
+          "folderPath": "/Haus/Keller + Süd",
+          "updatedAfter": "2026-09-01T12:34:56.123+02:00",
+          "updatedBefore": "2026-09-29T00:00:00Z"
+        },
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": [
+            {
+              "id": "11111111-1111-4111-8111-111111111111",
+              "name": "Gas & Wärme",
+              "folderPath": "/Haus/Keller",
+              "lastUpdatedAt": "2026-09-01T10:34:56.123Z"
+            },
+            {
+              "id": "22222222-2222-4222-8222-222222222222",
+              "name": "Wasser",
+              "folderPath": "/",
+              "lastUpdatedAt": null
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": [
+          {
+            "id": "11111111-1111-4111-8111-111111111111",
+            "name": "Gas & Wärme",
+            "folderPath": "/Haus/Keller",
+            "lastUpdatedAt": "2026-09-01T10:34:56.123Z"
+          },
+          {
+            "id": "22222222-2222-4222-8222-222222222222",
+            "name": "Wasser",
+            "folderPath": "/",
+            "lastUpdatedAt": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "devices-virtual-optional-date",
+      "operation": "devices.listVirtual",
+      "input": {},
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/virtual",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": [
+            {
+              "id": "11111111-1111-4111-8111-111111111111",
+              "name": "Gas",
+              "folderPath": "/"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": [
+          {
+            "id": "11111111-1111-4111-8111-111111111111",
+            "name": "Gas",
+            "folderPath": "/",
+            "lastUpdatedAt": null
+          }
+        ]
+      }
+    }
+  ]
+}

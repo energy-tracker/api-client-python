@@ -24,8 +24,18 @@ def main() -> None:
         ):
             raise SystemExit("Wheel contains files outside the package and its metadata")
     with tarfile.open(sdists[0]) as sdist:
-        if not any(name.endswith("/energy_tracker_api/py.typed") for name in sdist.getnames()):
+        source_files = {name.partition("/")[2] for name in sdist.getnames()}
+        if "energy_tracker_api/py.typed" not in source_files:
             raise SystemExit("Source distribution is missing py.typed")
+        contract_files = {
+            str(path.relative_to(root))
+            for path in (root / "contracts").rglob("*")
+            if path.is_file()
+        }
+        if "contracts/schema.json" not in contract_files or not contract_files <= source_files:
+            raise SystemExit("Source distribution is missing shared API contracts")
+        if not {"tests/test_contracts.py", "tests/conftest.py"} <= source_files:
+            raise SystemExit("Source distribution is missing the API contract test runner")
 
     with tempfile.TemporaryDirectory(prefix="energy-tracker-wheel-") as directory:
         environment = venv.EnvBuilder(with_pip=True)

@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "environments-list-empty",
+      "operation": "environments.list",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": []
+        }
+      },
+      "expected": {
+        "result": []
+      }
+    },
+    {
+      "id": "environments-list",
+      "operation": "environments.list",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": [
+            {
+              "id": "22222222-2222-4222-8222-222222222222",
+              "title": "Temperatur",
+              "unit": "°C",
+              "entries": [
+                {
+                  "timestamp": "2026-09-01T10:34:56.123Z",
+                  "value": -2.5
+                },
+                {
+                  "timestamp": "2026-09-02T00:00:00Z",
+                  "value": 0
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "result": [
+          {
+            "id": "22222222-2222-4222-8222-222222222222",
+            "title": "Temperatur",
+            "unit": "°C",
+            "entries": [
+              {
+                "timestamp": "2026-09-01T10:34:56.123Z",
+                "value": -2.5
+              },
+              {
+                "timestamp": "2026-09-02T00:00:00Z",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "environments-get",
+      "operation": "environments.get",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "environmentId": "22222222-2222-4222-8222-222222222222"
+      },
+      "request": {
+        "method": "GET",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments/22222222-2222-4222-8222-222222222222",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "id": "22222222-2222-4222-8222-222222222222",
+            "title": "Temperatur",
+            "unit": "°C",
+            "entries": [
+              {
+                "timestamp": "2026-09-01T10:34:56.123Z",
+                "value": -2.5
+              },
+              {
+                "timestamp": "2026-09-02T00:00:00Z",
+                "value": 0
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "id": "22222222-2222-4222-8222-222222222222",
+          "title": "Temperatur",
+          "unit": "°C",
+          "entries": [
+            {
+              "timestamp": "2026-09-01T10:34:56.123Z",
+              "value": -2.5
+            },
+            {
+              "timestamp": "2026-09-02T00:00:00Z",
+              "value": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "environments-create-minimal",
+      "operation": "environments.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "record": {
+          "title": "Temperatur"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "title": "Temperatur"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "id": "22222222-2222-4222-8222-222222222222",
+            "entries": [],
+            "title": "Temperatur"
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "unit": null,
+          "id": "22222222-2222-4222-8222-222222222222",
+          "entries": [],
+          "title": "Temperatur"
+        }
+      }
+    },
+    {
+      "id": "environments-create-unit",
+      "operation": "environments.create",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "record": {
+          "title": "Temperatur",
+          "unit": "°C"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "title": "Temperatur",
+            "unit": "°C"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "id": "22222222-2222-4222-8222-222222222222",
+            "entries": [],
+            "title": "Temperatur",
+            "unit": "°C"
+          }
+        }
+      },
+      "expected": {
+        "result": {
+          "unit": "°C",
+          "id": "22222222-2222-4222-8222-222222222222",
+          "entries": [],
+          "title": "Temperatur"
+        }
+      }
+    },
+    {
+      "id": "environments-delete",
+      "operation": "environments.delete",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "environmentId": "22222222-2222-4222-8222-222222222222"
+      },
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments/22222222-2222-4222-8222-222222222222",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 204,
+        "headers": {},
+        "body": {}
+      },
+      "expected": {
+        "result": null
+      }
+    },
+    {
+      "id": "environments-create-entry-minimal",
+      "operation": "environments.createEntry",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "environmentId": "22222222-2222-4222-8222-222222222222",
+        "entry": {
+          "value": 0
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments/22222222-2222-4222-8222-222222222222",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": 0
+          }
+        }
+      },
+      "response": {
+        "status": 204,
+        "headers": {},
+        "body": {}
+      },
+      "expected": {
+        "result": null
+      }
+    },
+    {
+      "id": "environments-create-entry-timestamp",
+      "operation": "environments.createEntry",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "environmentId": "22222222-2222-4222-8222-222222222222",
+        "entry": {
+          "value": -2.5,
+          "timestamp": "2026-09-01T12:34:56.123+02:00"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments/22222222-2222-4222-8222-222222222222",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "value": -2.5,
+            "timestamp": "2026-09-01T12:34:56.123+02:00"
+          }
+        }
+      },
+      "response": {
+        "status": 204,
+        "headers": {},
+        "body": {}
+      },
+      "expected": {
+        "result": null
+      }
+    },
+    {
+      "id": "environments-delete-entry",
+      "operation": "environments.deleteEntry",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "environmentId": "22222222-2222-4222-8222-222222222222",
+        "timestamp": "2026-09-01T12:34:56.123+02:00"
+      },
+      "request": {
+        "method": "DELETE",
+        "path": "/v1/devices/standard/11111111-1111-4111-8111-111111111111/environments/22222222-2222-4222-8222-222222222222/entries",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "timestamp": "2026-09-01T12:34:56.123+02:00"
+          }
+        }
+      },
+      "response": {
+        "status": 204,
+        "headers": {},
+        "body": {}
+      },
+      "expected": {
+        "result": null
+      }
+    }
+  ]
+}

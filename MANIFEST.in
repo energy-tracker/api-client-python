@@ -1,0 +1,2 @@
+recursive-include contracts *.json *.md
+include tests/conftest.py
