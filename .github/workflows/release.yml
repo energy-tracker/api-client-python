@@ -6,13 +6,14 @@ on:
       - "v*"
 
 permissions:
-  contents: write
-  id-token: write
+  contents: read
 
 jobs:
   quality-checks:
     name: Quality Checks
     runs-on: ubuntu-latest
+    outputs:
+      prerelease: ${{ steps.release.outputs.prerelease }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,6 +25,12 @@ jobs:
 
       - name: Install dependencies
         run: make install-dev
+
+      - name: Validate release tag
+        id: release
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: venv/bin/python scripts/check_release.py "$RELEASE_TAG" >> "$GITHUB_OUTPUT"
 
       - name: Run linting
         run: make lint
@@ -38,6 +45,9 @@ jobs:
     name: Build and Publish to PyPI
     needs: quality-checks
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -58,8 +68,10 @@ jobs:
 
   github-release:
     name: Create GitHub Release
-    needs: build-and-publish
+    needs: [quality-checks, build-and-publish]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -68,7 +80,7 @@ jobs:
 
       - name: Extract tag name
         id: tag
-        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
 
       - name: Generate changelog
         id: changelog
@@ -78,13 +90,15 @@ jobs:
           if [ -z "$PREV_TAG" ]; then
             COMMITS=$(git log --pretty=format:"- %s (%h)" --no-merges)
           else
-            COMMITS=$(git log ${PREV_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
+            COMMITS=$(git log "${PREV_TAG}..HEAD" --pretty=format:"- %s (%h)" --no-merges)
           fi
           
           echo "$COMMITS" > changelog.txt
-          echo "COMMITS<<EOF" >> $GITHUB_OUTPUT
-          cat changelog.txt >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          {
+            echo "COMMITS<<EOF"
+            cat changelog.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -110,5 +124,5 @@ jobs:
             - [PyPI](https://pypi.org/project/energy-tracker-api/)
             - [Documentation](https://github.com/energy-tracker/api-client-python#readme)
           draft: false
-          prerelease: false
+          prerelease: ${{ needs.quality-checks.outputs.prerelease == 'true' }}
           generate_release_notes: false

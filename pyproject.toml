@@ -34,6 +34,7 @@ dev = [
     "black>=26.0.0",
     "isort>=7.0.0",
     "mypy>=1.14.0",
+    "packaging>=24.0",
 ]
 
 [project.urls]
