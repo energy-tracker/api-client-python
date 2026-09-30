@@ -46,6 +46,10 @@ The client exposes four resource groups — all endpoints, parameters, and DTOs 
 | `client.environments` | `list()`, `get()`, `create()`, `delete()`, `create_entry()`, `delete_entry()` |
 | `client.calculations` | `daily_values()`, `extrapolations()` |
 
+Starting with version 3.0.0, meter-reading CSV exports default to semicolon (`;`).
+To preserve the comma-separated output of version 2.x, explicitly set
+`delimiter=CsvDelimiter.COMMA` in `ExportMeterReadingsDto`.
+
 ## Configuration
 
 ```python
