@@ -352,7 +352,7 @@
         "body": {
           "json": {
             "includeHeader": true,
-            "delimiter": "comma",
+            "delimiter": "semicolon",
             "dateFormat": "iso",
             "columns": [
               "date",
@@ -367,12 +367,12 @@
           "Content-Type": "text/csv; charset=utf-8"
         },
         "body": {
-          "base64": "77u/ZGF0ZSx2YWx1ZQ0KMjAyNi0wOS0wMVQxMDozNDo1Ni4xMjNaLDEyMy40NQ0K"
+          "base64": "77u/ZGF0ZTt2YWx1ZQ0KMjAyNi0wOS0wMVQxMDozNDo1Ni4xMjNaOzEyMy40NQ0K"
         }
       },
       "expected": {
         "result": {
-          "base64": "77u/ZGF0ZSx2YWx1ZQ0KMjAyNi0wOS0wMVQxMDozNDo1Ni4xMjNaLDEyMy40NQ0K"
+          "base64": "77u/ZGF0ZTt2YWx1ZQ0KMjAyNi0wOS0wMVQxMDozNDo1Ni4xMjNaOzEyMy40NQ0K"
         }
       }
     },
@@ -462,7 +462,7 @@
         "body": {
           "json": {
             "includeHeader": false,
-            "delimiter": "comma",
+            "delimiter": "semicolon",
             "dateFormat": "iso",
             "columns": [
               "value"
@@ -482,6 +482,102 @@
       "expected": {
         "result": {
           "base64": "MTIz"
+        }
+      }
+    },
+    {
+      "id": "readings-export-explicit-comma",
+      "operation": "meterReadings.export",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "config": {
+          "columns": [
+            "date",
+            "value"
+          ],
+          "delimiter": "comma"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings/export",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "includeHeader": true,
+            "delimiter": "comma",
+            "dateFormat": "iso",
+            "columns": [
+              "date",
+              "value"
+            ]
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/csv; charset=utf-8"
+        },
+        "body": {
+          "base64": "77u/ZGF0ZSx2YWx1ZQ0KMjAyNi0wOS0wMVQxMDozNDo1Ni4xMjNaLDEyMy40NQ0K"
+        }
+      },
+      "expected": {
+        "result": {
+          "base64": "77u/ZGF0ZSx2YWx1ZQ0KMjAyNi0wOS0wMVQxMDozNDo1Ni4xMjNaLDEyMy40NQ0K"
+        }
+      }
+    },
+    {
+      "id": "readings-export-explicit-tab",
+      "operation": "meterReadings.export",
+      "input": {
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "config": {
+          "columns": [
+            "date",
+            "value"
+          ],
+          "delimiter": "tab"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "path": "/v3/devices/standard/11111111-1111-4111-8111-111111111111/meter-readings/export",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "includeHeader": true,
+            "delimiter": "tab",
+            "dateFormat": "iso",
+            "columns": [
+              "date",
+              "value"
+            ]
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/csv; charset=utf-8"
+        },
+        "body": {
+          "base64": "77u/ZGF0ZQl2YWx1ZQ0KMjAyNi0wOS0wMVQxMDozNDo1Ni4xMjNaCTEyMy40NQ0K"
+        }
+      },
+      "expected": {
+        "result": {
+          "base64": "77u/ZGF0ZQl2YWx1ZQ0KMjAyNi0wOS0wMVQxMDozNDo1Ni4xMjNaCTEyMy40NQ0K"
         }
       }
     }

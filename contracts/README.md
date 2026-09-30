@@ -18,6 +18,8 @@ test and release checks. No API token, live backend or sibling checkout is neede
   header names case-insensitively; additional transport headers are allowed.
   Query key order and JSON object key order are irrelevant; extra query/body
   fields and duplicate query keys are not allowed.
+- Meter-reading CSV exports default to `semicolon`. Explicit `comma`, `semicolon`
+  and `tab` selections override the default.
 - `response` is the local server's synthetic HTTP response. Bodies use exactly
   one of `json`, UTF-8 `text`, or `base64`; `{}` means no body. A `json: null`
   body is distinct from no body. Base64 preserves exact CSV bytes, including BOM

@@ -113,13 +113,13 @@ class ExportMeterReadingsDto:
     Attributes:
         columns: Columns and their order in the exported CSV file.
         include_header: Whether to include the header row (default: True).
-        delimiter: CSV delimiter (default: comma).
+        delimiter: CSV delimiter (default: semicolon).
         date_format: Date format in the export (default: iso).
     """
 
     columns: list[ExportColumn]
     include_header: bool = True
-    delimiter: CsvDelimiter = CsvDelimiter.COMMA
+    delimiter: CsvDelimiter = CsvDelimiter.SEMICOLON
     date_format: DateFormat = DateFormat.ISO
 
     def _to_dict(self) -> dict:

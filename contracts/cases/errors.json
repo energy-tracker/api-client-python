@@ -194,7 +194,7 @@
         "body": {
           "json": {
             "includeHeader": true,
-            "delimiter": "comma",
+            "delimiter": "semicolon",
             "dateFormat": "iso",
             "columns": [
               "date",
@@ -1285,7 +1285,7 @@
         "body": {
           "json": {
             "includeHeader": true,
-            "delimiter": "comma",
+            "delimiter": "semicolon",
             "dateFormat": "iso",
             "columns": [
               "date",
