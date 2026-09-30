@@ -369,7 +369,7 @@ class TestMeterReadingResourceExport:
     async def test_export_minimal(self):
         # Arrange
         client = Mock(spec=EnergyTrackerClient)
-        client._make_request = AsyncMock(return_value=b"date,value\n2024-01-15,123.45\n")
+        client._make_request = AsyncMock(return_value=b"date;value\n2024-01-15;123.45\n")
         resource = MeterReadingResource(client)
         config = ExportMeterReadingsDto(columns=[ExportColumn.DATE, ExportColumn.VALUE])
 
@@ -377,7 +377,7 @@ class TestMeterReadingResourceExport:
         result = await resource.export(device_id="device-123", export_config=config)
 
         # Assert
-        assert result == b"date,value\n2024-01-15,123.45\n"
+        assert result == b"date;value\n2024-01-15;123.45\n"
         client._make_request.assert_called_once_with(
             method="POST",
             endpoint="/v3/devices/standard/device-123/meter-readings/export",
@@ -385,7 +385,7 @@ class TestMeterReadingResourceExport:
             json={
                 "columns": ["date", "value"],
                 "includeHeader": True,
-                "delimiter": "comma",
+                "delimiter": "semicolon",
                 "dateFormat": "iso",
             },
             params=None,
@@ -417,7 +417,7 @@ class TestMeterReadingResourceExport:
             json={
                 "columns": ["date", "value"],
                 "includeHeader": True,
-                "delimiter": "comma",
+                "delimiter": "semicolon",
                 "dateFormat": "iso",
             },
             params={

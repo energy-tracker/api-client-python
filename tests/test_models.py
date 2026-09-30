@@ -226,7 +226,7 @@ class TestExportMeterReadingsDto:
         assert result == {
             "columns": ["date", "value"],
             "includeHeader": True,
-            "delimiter": "comma",
+            "delimiter": "semicolon",
             "dateFormat": "iso",
         }
 
@@ -235,7 +235,7 @@ class TestExportMeterReadingsDto:
         dto = ExportMeterReadingsDto(
             columns=[ExportColumn.DATE, ExportColumn.VALUE, ExportColumn.NOTE],
             include_header=False,
-            delimiter=CsvDelimiter.SEMICOLON,
+            delimiter=CsvDelimiter.COMMA,
             date_format=DateFormat.UNIX,
         )
 
@@ -246,7 +246,7 @@ class TestExportMeterReadingsDto:
         assert result == {
             "columns": ["date", "value", "note"],
             "includeHeader": False,
-            "delimiter": "semicolon",
+            "delimiter": "comma",
             "dateFormat": "unix",
         }
 
