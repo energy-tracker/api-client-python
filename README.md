@@ -37,7 +37,7 @@ asyncio.run(main())
 
 ## Resources
 
-The client exposes four resource groups — all endpoints, parameters, and DTOs are documented in the [OpenAPI specification](https://github.com/energy-tracker/public-docs/blob/main/public-api/openapi.yml).
+The client exposes five resource groups — all endpoints, parameters, and DTOs are documented in the [OpenAPI specification](https://github.com/energy-tracker/public-docs/blob/main/public-api/openapi.yml).
 
 | Resource | Methods |
 |---|---|
@@ -45,6 +45,7 @@ The client exposes four resource groups — all endpoints, parameters, and DTOs 
 | `client.meter_readings` | `list()`, `create()`, `delete()`, `export()` |
 | `client.environments` | `list()`, `get()`, `create()`, `delete()`, `create_entry()`, `delete_entry()` |
 | `client.calculations` | `daily_values()`, `extrapolations()` |
+| `client.token` | `status()` |
 
 Starting with version 3.0.0, meter-reading CSV exports default to semicolon (`;`).
 To preserve the comma-separated output of version 2.x, explicitly set

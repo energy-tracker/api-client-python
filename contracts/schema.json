@@ -42,7 +42,8 @@
             "environments.createEntry",
             "environments.deleteEntry",
             "calculations.dailyValues",
-            "calculations.extrapolations"
+            "calculations.extrapolations",
+            "token.status"
           ]
         },
         "input": {
@@ -710,6 +711,25 @@
                   "deviceId",
                   "environmentId"
                 ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operation": {
+                "const": "token.status"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "input": {
+                "type": "object",
+                "properties": {},
+                "required": [],
                 "additionalProperties": false
               }
             }

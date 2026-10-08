@@ -19,6 +19,8 @@ from energy_tracker_api.models import (
     ExportMeterReadingsDto,
     MeterReadingDto,
     TimestampDto,
+    TokenScope,
+    TokenStatusDto,
 )
 
 
@@ -379,3 +381,83 @@ class TestCreateEnvironmentEntryDto:
             "value": 23.5,
             "timestamp": "2024-01-15T10:30:45.123",
         }
+
+
+class TestTokenStatusDto:
+    """Tests for TokenStatusDto."""
+
+    def test_from_dict_with_all_fields(self):
+        # Arrange
+        data = {
+            "displayName": "Home Assistant",
+            "scopes": ["write:meter-reading", "read:measuring-device"],
+            "expiresAt": "2027-01-01T00:00:00.000Z",
+        }
+
+        # Act
+        result = TokenStatusDto._from_dict(data)
+
+        # Assert
+        assert result.display_name == "Home Assistant"
+        assert result.scopes == [
+            TokenScope.WRITE_METER_READING,
+            TokenScope.READ_MEASURING_DEVICE,
+        ]
+        assert all(isinstance(scope, TokenScope) for scope in result.scopes)
+        assert result.expires_at is not None
+
+    def test_from_dict_without_expiry(self):
+        # Arrange
+        data = {
+            "displayName": "Home Assistant",
+            "scopes": ["write:meter-reading"],
+            "expiresAt": None,
+        }
+
+        # Act
+        result = TokenStatusDto._from_dict(data)
+
+        # Assert
+        assert result.display_name == "Home Assistant"
+        assert result.expires_at is None
+
+    def test_from_dict_without_expiry_key(self):
+        # Arrange
+        data = {
+            "displayName": "Home Assistant",
+            "scopes": ["write:meter-reading"],
+        }
+
+        # Act
+        result = TokenStatusDto._from_dict(data)
+
+        # Assert
+        assert result.expires_at is None
+
+    def test_from_dict_preserves_unknown_scopes(self):
+        # Arrange
+        data = {
+            "displayName": "Home Assistant",
+            "scopes": ["meter-reading", "read:future-resource"],
+            "expiresAt": None,
+        }
+
+        # Act
+        result = TokenStatusDto._from_dict(data)
+
+        # Assert
+        assert result.scopes == [TokenScope.METER_READING, "read:future-resource"]
+        assert not isinstance(result.scopes[1], TokenScope)
+
+    @pytest.mark.parametrize("scopes", ["write:meter-reading", None, ["write:meter-reading", 1]])
+    def test_from_dict_rejects_invalid_scopes(self, scopes):
+        # Arrange
+        data = {
+            "displayName": "Home Assistant",
+            "scopes": scopes,
+            "expiresAt": None,
+        }
+
+        # Act & Assert
+        with pytest.raises(TypeError, match="scopes must be a list of strings"):
+            TokenStatusDto._from_dict(data)

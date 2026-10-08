@@ -32,6 +32,8 @@ from .models import (
     MeterReadingDto,
     SortDirection,
     TimestampDto,
+    TokenScope,
+    TokenStatusDto,
 )
 
 __version__ = version("energy-tracker-api")
@@ -54,6 +56,8 @@ __all__ = [
     "EnvironmentRecordDto",
     "EnvironmentEntryDto",
     "TimestampDto",
+    "TokenScope",
+    "TokenStatusDto",
     # Exceptions
     "EnergyTrackerAPIError",
     "ValidationError",
