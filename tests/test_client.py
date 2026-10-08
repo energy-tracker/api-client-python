@@ -126,6 +126,17 @@ class TestEnergyTrackerClientInitialization:
         assert hasattr(client.environments, "list")
         assert hasattr(client.environments, "create")
 
+    def test_token_resource_is_initialized(self):
+        # Arrange
+        access_token = "test-token"
+
+        # Act
+        client = EnergyTrackerClient(access_token=access_token)
+
+        # Assert
+        assert client.token is not None
+        assert hasattr(client.token, "status")
+
 
 class TestEnergyTrackerClientExtractApiMessage:
     """Tests for _extract_api_message method."""

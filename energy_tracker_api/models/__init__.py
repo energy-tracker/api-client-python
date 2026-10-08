@@ -18,6 +18,7 @@ from .meter_readings import (
     MeterReadingDto,
     SortDirection,
 )
+from .token import TokenScope, TokenStatusDto
 
 __all__ = [
     "CalculationInterval",
@@ -36,4 +37,6 @@ __all__ = [
     "CreateEnvironmentEntryDto",
     "EnvironmentRecordDto",
     "EnvironmentEntryDto",
+    "TokenScope",
+    "TokenStatusDto",
 ]

@@ -522,6 +522,43 @@
       }
     },
     {
+      "id": "token-status-wrong-status",
+      "operation": "token.status",
+      "input": {},
+      "request": {
+        "method": "GET",
+        "path": "/v1/token/status",
+        "query": {},
+        "headers": {
+          "Authorization": "Bearer contract-test-token"
+        },
+        "body": {}
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "json": {
+            "displayName": "Home Assistant Zählerschrank",
+            "scopes": [
+              "write:meter-reading",
+              "read:measuring-device"
+            ],
+            "expiresAt": "2027-01-01T00:00:00.000Z"
+          }
+        }
+      },
+      "expected": {
+        "error": {
+          "kind": "api",
+          "status": 201,
+          "messages": []
+        }
+      }
+    },
+    {
       "id": "readings-create-error-400",
       "operation": "meterReadings.create",
       "input": {

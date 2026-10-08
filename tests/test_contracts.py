@@ -59,8 +59,18 @@ OPERATIONS = {
     "environments.deleteEntry": ("environments", "delete_entry"),
     "calculations.dailyValues": ("calculations", "daily_values"),
     "calculations.extrapolations": ("calculations", "extrapolations"),
+    "token.status": ("token", "status"),
 }
-TIMESTAMPS = {"timestamp", "date", "lastUpdatedAt", "from", "to", "updatedAfter", "updatedBefore"}
+TIMESTAMPS = {
+    "timestamp",
+    "date",
+    "lastUpdatedAt",
+    "expiresAt",
+    "from",
+    "to",
+    "updatedAfter",
+    "updatedBefore",
+}
 
 
 def load_cases():

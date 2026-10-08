@@ -31,13 +31,17 @@ test and release checks. No API token, live backend or sibling checkout is neede
   present, `retryAfter` in seconds. Exception class names and local wording are
   language-specific. Assert exactly one request, including on errors/redirects.
 
-Compare `timestamp`, `date`, `lastUpdatedAt`, `from`, `to`, `updatedAfter` and
-`updatedBefore` as offset-aware instants. `Z` and equivalent offsets/fractional
-spellings are interchangeable. Do not round to calendar boundaries. Compare
-all other values directly, preserving decimal precision and list order.
+Compare `timestamp`, `date`, `lastUpdatedAt`, `expiresAt`, `from`, `to`,
+`updatedAfter` and `updatedBefore` as offset-aware instants. `Z` and equivalent
+offsets/fractional spellings are interchangeable. Do not round to calendar
+boundaries. Compare all other values directly, preserving decimal precision and
+list order. Token scopes compare as strings; scopes unknown to an SDK pass
+through unchanged.
 
 The wire examples were checked against the Public API controllers and DTOs in
 [energy-tracker-core at fcc269a06184426caf64c882291d4209be57a723](https://github.com/StefaniOSApps/energy-tracker-core/tree/fcc269a06184426caf64c882291d4209be57a723/backend/src/app/public-api).
+The token status examples were checked against
+[energy-tracker-core at 969b1b722d3e56505c86ecdd098e1bcebaff90b3](https://github.com/StefaniOSApps/energy-tracker-core/tree/969b1b722d3e56505c86ecdd098e1bcebaff90b3/backend/src/app/public-api).
 Error/redirect/malformed-response cases additionally specify SDK behavior; their
 messages are illustrative, not fixed backend wording. These mocked responses
 do not verify server calculations, validation rules or authorization scopes.
