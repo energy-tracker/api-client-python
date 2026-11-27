@@ -32,7 +32,7 @@ class TestEnergyTrackerClientInitialization:
 
         # Assert
         assert client._access_token == access_token
-        assert client._base_url == "https://public-api.energy-tracker.best-ios-apps.de"
+        assert client._base_url == "https://public-api.energy-tracker.app"
         assert client._timeout.total == 10
         assert client._session is None
 

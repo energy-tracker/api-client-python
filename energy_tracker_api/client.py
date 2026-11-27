@@ -25,7 +25,7 @@ from .exceptions import (
 class EnergyTrackerClient:
     """Async client for interacting with the Energy Tracker public REST API."""
 
-    _DEFAULT_BASE_URL = "https://public-api.energy-tracker.best-ios-apps.de"
+    _DEFAULT_BASE_URL = "https://public-api.energy-tracker.app"
 
     _base_url: str
     _access_token: str
